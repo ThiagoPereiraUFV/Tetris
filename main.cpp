@@ -1,0 +1,401 @@
+#include <iostream>
+#include <cstdlib>
+#include <unordered_map>
+#include <vector>
+#include <GL/glut.h>
+#include <ncurses.h>
+#include <unistd.h>
+#include "Tetris.h"
+#include "variaveisGlobais.cpp"
+#include "menu.cpp"
+#include "tetris.cpp"
+
+//	Funcao utilizada para atualizar variaveis importantes que dependem do tamanho atual da janela por exemplo
+void updateVariables() {
+	p0 = make_pair(-view_h*0.1, -view_h*0.1);
+	p1 = make_pair(view_h*0.3, view_h*0.03);
+	boxPos = {
+	{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)}, 
+	{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)}, {"RAPIDO", make_pair(-(p0.first+p1.first)/2, view_h*0.5)}, {"TURBO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), view_h*0.5)}, 
+	{"20x10", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.2)}, {"30x15", make_pair(-(p0.first+p1.first)/2, view_h*0.2)}, {"50x25", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), view_h*0.2)}, 
+	{"Cores1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, -view_h*0.1)}, {"Cores2", make_pair(-(p0.first+p1.first)/2, -view_h*0.1)}, {"Cores3", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), -view_h*0.1)}, 
+	{"NORMAL2", make_pair(-(p0.first+p1.first)/2 - view_h*0.25, -view_h*0.4)}, {"BEBADO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.25), -view_h*0.4)}, 
+	{"SAIR", make_pair(-(p0.first+p1.first)/2, -view_h*0.7)}};
+	cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
+	glClearColor(colors[cor]["Background"][0], colors[cor]["Background"][1], colors[cor]["Background"][2], 1.0);
+}
+
+//	Funcao principal para renderizar os graficos do jogo
+void display() {
+	glClear(GL_COLOR_BUFFER_BIT);
+	updateVariables();
+	if(state == 0)
+		renderMenu();
+	else	if(state == 1) {
+				if(!gameRunning) {
+					srand(time(NULL));
+					configVars();
+					configGame();
+					gameRunning = 1;
+				}
+				renderGameFrame();
+			}
+			else	if(state == 2) {
+						usleep(3000000);
+						state = 0;
+					}
+					else {
+						cout << "Até mais!\n";
+						exit(0);
+					}
+	/*
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINES);
+		glVertex2f(0, view_h);
+		glVertex2f(0, -view_h);
+		glVertex2f(view_w, 0);
+		glVertex2f(-view_w, 0);
+	glEnd();
+	*/
+	glutSwapBuffers();
+	glutPostRedisplay();
+}
+
+//	Funcao para redimensionar os objetos desenhados na tela e mantelos na mesma proporcao da janela
+void reshape(const GLsizei w, const GLsizei h) {
+	view_w = w/2;
+	view_h = h/2;
+	updateVariables();
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-w/2, w/2, -h/2, h/2);
+	glutPostRedisplay();
+}
+
+//	Funcao utilizada para tratar o uso das setas direcionais no menu ou durante o jogo
+void SpecialKeys(const int key, const int x, const int y){
+	if(state == 0) {
+		switch(key) {
+			case GLUT_KEY_UP:
+				if(selecN["INICIAR"].second) {
+					selec = selecN["SAIR"].first;
+					selecN["SAIR"].second = 1;
+					selecN["INICIAR"].second = 0;
+				}
+				else	if(selecN["SAIR"].second) {
+							selec = selecN["NORMAL2"].first;
+							selecN["NORMAL2"].second = 1;
+							selecN["SAIR"].second = 0;
+						}
+						else	if(selecN["NORMAL2"].second || selecN["BEBADO"].second) {
+									selec = selecN["Cores1"].first;
+									selecN["Cores1"].second = 1;
+									selecN["NORMAL2"].second = selecN["BEBADO"].second = 0;
+								}
+								else	if(selecN["Cores1"].second || selecN["Cores2"].second || selecN["Cores3"].second) {
+											selec = selecN["20x10"].first;
+											selecN["20x10"].second = 1;
+											selecN["Cores1"].second = selecN["Cores2"].second = selecN["Cores3"].second = 0;
+										}
+											else	if(selecN["20x10"].second || selecN["30x15"].second || selecN["50x25"].second) {
+													selec = selecN["NORMAL1"].first;
+													selecN["NORMAL1"].second = 1;
+													selecN["20x10"].second = selecN["30x15"].second = selecN["50x25"].second = 0;
+												}
+												else	if(selecN["NORMAL1"].second || selecN["RAPIDO"].second || selecN["TURBO"].second) {
+															selec = selecN["INICIAR"].first;
+															selecN["INICIAR"].second = 1;
+															selecN["NORMAL1"].second = selecN["RAPIDO"].second = selecN["TURBO"].second = 0;
+														}
+				break;
+			case GLUT_KEY_DOWN:
+				if(selecN["INICIAR"].second) {
+					selec = selecN["NORMAL1"].first;
+					selecN["NORMAL1"].second = 1;
+					selecN["INICIAR"].second = 0;
+				}
+				else	if(selecN["NORMAL1"].second || selecN["RAPIDO"].second || selecN["TURBO"].second) {
+							selec = selecN["20x10"].first;
+							selecN["20x10"].second = 1;
+							selecN["NORMAL1"].second = selecN["RAPIDO"].second = selecN["TURBO"].second = 0;
+						}
+						else	if(selecN["20x10"].second || selecN["30x15"].second || selecN["50x25"].second) {
+									selec = selecN["Cores1"].first;
+									selecN["Cores1"].second = 1;
+									selecN["20x10"].second = selecN["30x15"].second = selecN["50x25"].second = 0;
+								}
+								else	if(selecN["Cores1"].second || selecN["Cores2"].second || selecN["Cores3"].second) {
+											selec = selecN["NORMAL2"].first;
+											selecN["NORMAL2"].second = 1;
+											selecN["Cores1"].second = selecN["Cores2"].second = selecN["Cores3"].second = 0;
+										}
+										else	if(selecN["NORMAL2"].second || selecN["BEBADO"].second) {
+													selec = selecN["SAIR"].first;
+													selecN["SAIR"].second = 1;
+													selecN["NORMAL2"].second = selecN["BEBADO"].second = 0;
+												}
+												else	if(selecN["SAIR"].second) {
+															selec = selecN["INICIAR"].first;
+															selecN["INICIAR"].second = 1;
+															selecN["SAIR"].second = 0;
+														}
+				break;
+			case GLUT_KEY_RIGHT:
+				if(selecN["NORMAL1"].second) {
+					selec = selecN["RAPIDO"].first;
+					selecN["RAPIDO"].second = 1;
+					selecN["NORMAL1"].second = 0;
+				}
+				else	if(selecN["RAPIDO"].second) {
+							selec = selecN["TURBO"].first;
+							selecN["TURBO"].second = 1;
+							selecN["RAPIDO"].second = 0;
+						}
+						else	if(selecN["TURBO"].second) {
+									selec = selecN["NORMAL1"].first;
+									selecN["NORMAL1"].second = 1;
+									selecN["TURBO"].second = 0;
+								}
+				if(selecN["20x10"].second) {
+					selec = selecN["30x15"].first;
+					selecN["30x15"].second = 1;
+					selecN["20x10"].second = 0;
+				}
+				else	if(selecN["30x15"].second) {
+							selec = selecN["50x25"].first;
+							selecN["50x25"].second = 1;
+							selecN["30x15"].second = 0;
+						}
+						else	if(selecN["50x25"].second) {
+									selec = selecN["20x10"].first;
+									selecN["20x10"].second = 1;
+									selecN["50x25"].second = 0;
+								}
+				if(selecN["Cores1"].second) {
+					selec = selecN["Cores2"].first;
+					selecN["Cores2"].second = 1;
+					selecN["Cores1"].second = 0;
+				}
+				else	if(selecN["Cores2"].second) {
+					selec = selecN["Cores3"].first;
+							selecN["Cores3"].second = 1;
+							selecN["Cores2"].second = 0;
+						}
+						else	if(selecN["Cores3"].second) {
+									selec = selecN["Cores1"].first;
+									selecN["Cores1"].second = 1;
+									selecN["Cores3"].second = 0;
+								}
+				if(selecN["NORMAL2"].second) {
+					selec = selecN["BEBADO"].first;
+					selecN["BEBADO"].second = 1;
+					selecN["NORMAL2"].second = 0;
+				}
+				else	if(selecN["BEBADO"].second) {
+							selec = selecN["NORMAL2"].first;
+							selecN["NORMAL2"].second = 1;
+							selecN["BEBADO"].second = 0;
+						}
+				break;
+			case GLUT_KEY_LEFT:
+				if(selecN["NORMAL1"].second) {
+					selec = selecN["TURBO"].first;
+					selecN["TURBO"].second = 1;
+					selecN["NORMAL1"].second = 0;
+				}
+				else	if(selecN["TURBO"].second) {
+							selec = selecN["RAPIDO"].first;
+							selecN["RAPIDO"].second = 1;
+							selecN["TURBO"].second = 0;
+						}
+						else	if(selecN["RAPIDO"].second) {
+									selec = selecN["NORMAL1"].first;
+									selecN["NORMAL1"].second = 1;
+									selecN["RAPIDO"].second = 0;
+								}
+				if(selecN["20x10"].second) {
+					selec = selecN["50x25"].first;
+					selecN["50x25"].second = 1;
+					selecN["20x10"].second = 0;
+				}
+				else	if(selecN["50x25"].second) {
+							selec = selecN["30x15"].first;
+							selecN["30x15"].second = 1;
+							selecN["50x25"].second = 0;
+						}
+						else	if(selecN["30x15"].second) {
+									selec = selecN["20x10"].first;
+									selecN["20x10"].second = 1;
+									selecN["30x15"].second = 0;
+								}
+				if(selecN["Cores1"].second) {
+					selec = selecN["Cores3"].first;
+					selecN["Cores3"].second = 1;
+					selecN["Cores1"].second = 0;
+				}
+				else	if(selecN["Cores3"].second) {
+							selec = selecN["Cores2"].first;
+							selecN["Cores2"].second = 1;
+							selecN["Cores3"].second = 0;
+						}
+						else	if(selecN["Cores2"].second) {
+									selec = selecN["Cores1"].first;
+									selecN["Cores1"].second = 1;
+									selecN["Cores2"].second = 0;
+								}
+				if(selecN["NORMAL2"].second) {
+					selec = selecN["BEBADO"].first;
+					selecN["BEBADO"].second = 1;
+					selecN["NORMAL2"].second = 0;
+				}
+				else	if(selecN["BEBADO"].second) {
+							selec = selecN["NORMAL2"].first;
+							selecN["NORMAL2"].second = 1;
+							selecN["BEBADO"].second = 0;
+						}
+				break;
+		}
+	}
+	if(state == 1) {
+		switch(key) {
+			case GLUT_KEY_LEFT:
+				ultimaTecla = 'l';
+				break;
+			case GLUT_KEY_RIGHT:
+				ultimaTecla = 'r';
+				break;
+			case GLUT_KEY_DOWN:
+				ultimaTecla = 'a';
+				break;
+		}
+	}
+	glutPostRedisplay();
+}
+
+//	Funcao utilizada para tratar o uso das teclas enter, esc e spacebar no menu ou durante o jogos
+void HandleKeyboard(const unsigned char key, const int x, const int y) {
+	if(state == 0)
+		switch(key) {
+			case 13:
+				if(selecI[selec] == "NORMAL1" || selecI[selec] == "RAPIDO" || selecI[selec] == "TURBO") {
+					option["NORMAL1"] = option["RAPIDO"] = option["TURBO"] = 0;
+					option[selecI[selec]] = 1;
+				}
+				else	if(selecI[selec] == "20x10" || selecI[selec] == "30x15" || selecI[selec] == "50x25") {
+							option["20x10"] = option["30x15"] = option["50x25"] = 0;
+							option[selecI[selec]] = 1;
+						}
+						else	if(selecI[selec] == "Cores1" || selecI[selec] == "Cores2" || selecI[selec] == "Cores3") {
+									option["Cores1"] = option["Cores2"] = option["Cores3"] = 0;
+									option[selecI[selec]] = 1;
+								}
+								else	if(selecI[selec] == "NORMAL2" || selecI[selec] == "BEBADO") {
+											option["NORMAL2"] = option["BEBADO"] = 0;
+											option[selecI[selec]] = 1;
+										}
+				if(selecI[selec] == "INICIAR")
+					state = 1;
+				if(selecI[selec] == "SAIR")
+					state = 3;
+				break;
+			case 27:
+				for(auto value : optNames) {
+					selecN[value].second = 0;
+				}
+				selecN["SAIR"].second = 1;
+				selec = selecN["SAIR"].first;
+				break;
+		}
+	if(state == 1)
+		switch(key) {
+			case 27:
+				state = 0;
+				gameRunning = 0;
+			case 32:
+				ultimaTecla = 's';
+				break;
+		}
+	glutPostRedisplay();
+}
+
+//	Funcao utilizada para tratar o uso do mouse ao selecionar as opcoes do menu
+void HandleMouse(const int button, const int btnState, const int x, const int y) {
+	if(state == 0)
+		switch(button) {
+			case GLUT_LEFT_BUTTON:
+				if(btnState == GLUT_DOWN) {
+					//cout << "n(" << x - view_w << ", " <<  view_h - y << ")\n";
+					const string cursorSelec = mousePointer(x - view_w, view_h - y);
+					if(cursorSelec.length()) {
+						if(cursorSelec == "INICIAR")
+							state = 1;
+						else	if(cursorSelec == "NORMAL1" || cursorSelec == "RAPIDO" || cursorSelec == "TURBO") {
+									option["NORMAL1"] = 0;
+									option["RAPIDO"] = 0;
+									option["TURBO"] = 0;
+									option[cursorSelec] = 1;
+								}
+								else	if(cursorSelec == "20x10" || cursorSelec == "30x15" || cursorSelec == "50x25") {
+											option["20x10"] = 0;
+											option["30x15"] = 0;
+											option["50x25"] = 0;
+											option[cursorSelec] = 1;
+										}
+										else	if(cursorSelec == "Cores1" || cursorSelec == "Cores2" || cursorSelec == "Cores3") {
+													option["Cores1"] = 0;
+													option["Cores2"] = 0;
+													option["Cores3"] = 0;
+													option[cursorSelec] = 1;
+												}
+												else	if(cursorSelec == "NORMAL2" || cursorSelec == "BEBADO") {
+															option["NORMAL2"] = 0;
+															option["BEBADO"] = 0;
+															option[cursorSelec] = 1;
+														}
+														else {
+															state = 3;
+														}
+					}
+				}
+		}
+	glutPostRedisplay();
+}
+
+//	Funcao utilizada para tratar do posicionamento do retangulo de selecao durante o uso do mouse no menu
+void MousePassiveMotion(const int x, const int y){
+	if(state == 0) {
+		//cout << "n(" << x - view_w << ", " <<  view_h - y << ")\n";
+		const string cursorSelec = mousePointer(x - view_w, view_h - y);
+		if(cursorSelec.length()) {
+			for(auto value : optNames) {
+				selecN[value].second = 0;
+			}
+			selecN[cursorSelec].second = 1;
+			selec = selecN[cursorSelec].first;
+		}
+	}
+	glutPostRedisplay();
+}
+
+//	Funcao utilizada para inicializar algumas funcoes do openGl e ajustar posicao, largura e altura da janela
+void init() {
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)-WINDOW_WIDTH)/2, (glutGet(GLUT_SCREEN_HEIGHT)-WINDOW_HEIGHT)/2);
+	glutCreateWindow("Tetris v1.0 by Thiago Pereira");
+	glClearColor(colors[cor]["Background"][0], colors[cor]["Background"][1], colors[cor]["Background"][2], 1.0);
+}
+
+int main(int argc, char** argv) {
+	glutInit(&argc, argv);
+	init();
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutSpecialFunc(SpecialKeys);
+	glutKeyboardFunc(HandleKeyboard);
+	glutMouseFunc(HandleMouse);
+	glutPassiveMotionFunc(MousePassiveMotion);
+	glutMainLoop();
+	return 0;
+}
