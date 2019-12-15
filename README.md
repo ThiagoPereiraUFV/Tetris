@@ -1,1 +1,1 @@
-# Tetris
+# Tetris by Thiago M. Pereira
