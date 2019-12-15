@@ -1,4 +1,4 @@
-Trabalho desenvolvido por Thiago Marinho Pereira de matricula 92540
+# Tetris by Thiago Marinho Pereira
 
 *** Para executar o jogo bastar executar o comando make na pasta do jogo que a tela sera exibida automaticamente
 
