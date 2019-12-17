@@ -15,4 +15,4 @@ __You must have to install the ncurses and openGL libraries using the next comma
 
 __Execute the following command to compile the code and run the game on your Linux Terminal__
 
->  make && main.out
+>  make
