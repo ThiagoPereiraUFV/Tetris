@@ -13,6 +13,6 @@ __You must have to install the ncurses and openGL libraries using the next comma
 > sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev
 
 
-__Execute the following command to compile the code and run the game on your Linux Terminal__
+__Execute the following command to compile the code and run the game on your Linux Terminal:__
 
 >  make
