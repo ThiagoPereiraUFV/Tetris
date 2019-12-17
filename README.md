@@ -1,6 +1,4 @@
-# Tetris v1.0
-
-Developed by Thiago Marinho Pereira
+# Tetris v1.0 by Thiago Marinho Pereira
 
 Run the game typing make on Linux Terminal
 
