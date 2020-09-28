@@ -1,20 +1,26 @@
-#include <iostream>
-#include <cstdlib>
-#include <unordered_map>
-#include <vector>
+#include "Game.h"
 
-#include <GL/glut.h>
-#include <ncurses.h>
-#include <unistd.h>
+// -------- Tamanho inicial da janela --------
 
-#include "./include/Tetris.h"
-#include "variaveisGlobais.cpp"
-#include "menu.cpp"
-#include "tetris.cpp"
+#define WINDOW_WIDTH 500   //	Largura inicial
+#define WINDOW_HEIGHT 600  //	Altura inicial
 
-//	Funcao utilizada para atualizar variaveis importantes que dependem do
-// tamanho atual da janela por exemplo
-void updateVariables() {
+using namespace std;
+
+Game::Game(int argc, char** argv) {
+	glutInit(&argc, argv);
+	init();
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutSpecialFunc(SpecialKeys);
+	glutKeyboardFunc(HandleKeyboard);
+	glutMouseFunc(HandleMouse);
+	glutPassiveMotionFunc(MousePassiveMotion);
+	glutMainLoop();
+}
+
+//	Funcao utilizada para atualizar variaveis importantes que dependem do tamanho atual da janela por exemplo
+void Game::updateVariables() {
 	p0 = make_pair(-view_h * 0.1, -view_h * 0.1);
 	p1 = make_pair(view_h * 0.3, view_h * 0.03);
 	boxPos = {
@@ -46,7 +52,7 @@ void updateVariables() {
 }
 
 //	Funcao principal para renderizar os graficos do jogo
-void display() {
+void Game::display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	updateVariables();
 	if(state == 0)
@@ -81,7 +87,7 @@ void display() {
 
 //	Funcao para redimensionar os objetos desenhados na tela e mantelos na mesma
 // proporcao da janela
-void reshape(const GLsizei w, const GLsizei h) {
+void Game::reshape(const GLsizei w, const GLsizei h) {
 	view_w = w / 2;
 	view_h = h / 2;
 	updateVariables();
@@ -94,7 +100,7 @@ void reshape(const GLsizei w, const GLsizei h) {
 
 //	Funcao utilizada para tratar o uso das setas direcionais no menu ou durante
 // o jogo
-void SpecialKeys(const int key, const int x, const int y) {
+void Game::SpecialKeys(const int key, const int x, const int y) {
 	if(state == 0) {
 		switch(key) {
 			case GLUT_KEY_UP:
@@ -283,7 +289,7 @@ void SpecialKeys(const int key, const int x, const int y) {
 
 //	Funcao utilizada para tratar o uso das teclas enter, esc e spacebar no menu
 // ou durante o jogos
-void HandleKeyboard(const unsigned char key, const int x, const int y) {
+void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 	if(state == 0)
 		switch(key) {
 			case 13:
@@ -332,7 +338,7 @@ void HandleKeyboard(const unsigned char key, const int x, const int y) {
 }
 
 //	Funcao utilizada para tratar o uso do mouse ao selecionar as opcoes do menu
-void HandleMouse(const int button, const int btnState, const int x,
+void Game::HandleMouse(const int button, const int btnState, const int x,
                  const int y) {
 	if(state == 0)
 		switch(button) {
@@ -382,7 +388,7 @@ void HandleMouse(const int button, const int btnState, const int x,
 
 //	Funcao utilizada para tratar do posicionamento do retangulo de selecao
 // durante o uso do mouse no menu
-void MousePassiveMotion(const int x, const int y) {
+void Game::MousePassiveMotion(const int x, const int y) {
 	if(state == 0) {
 		// cout << "n(" << x - view_w << ", " <<  view_h - y << ")\n";
 		const string cursorSelec = mousePointer(x - view_w, view_h - y);
@@ -399,7 +405,7 @@ void MousePassiveMotion(const int x, const int y) {
 
 //	Funcao utilizada para inicializar algumas funcoes do openGl e ajustar
 // posicao, largura e altura da janela
-void init() {
+void Game::init() {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WINDOW_WIDTH) / 2,
@@ -407,17 +413,4 @@ void init() {
 	glutCreateWindow("Tetris v1.0 by Thiago Pereira");
 	glClearColor(colors[cor]["Background"][0], colors[cor]["Background"][1],
 	             colors[cor]["Background"][2], 1.0);
-}
-
-int main(int argc, char** argv) {
-	glutInit(&argc, argv);
-	init();
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutSpecialFunc(SpecialKeys);
-	glutKeyboardFunc(HandleKeyboard);
-	glutMouseFunc(HandleMouse);
-	glutPassiveMotionFunc(MousePassiveMotion);
-	glutMainLoop();
-	return 0;
 }
