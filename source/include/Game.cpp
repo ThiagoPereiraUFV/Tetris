@@ -69,7 +69,6 @@ void Game::display() {
 		usleep(3000000);
 		state = 0;
 	} else {
-		cout << "Até mais!\n";
 		exit(0);
 	}
 	/*

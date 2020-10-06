@@ -21,6 +21,7 @@ class Game {
       vector<string> optNames;   //  Vetor com o nome dos botoes, NORMAL1 e NORMAL2 sao excecoes pois causam conflito ao usar um map
       unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;   //	Map usado para representar o esquema de cores selecionado
       string cor; //	String que define qual esquema de cores foi selecionado
+      char idPecaAtual, ultimaTecla;	//	Auxiliares
    public:
       Game(int argc, char** argv);
       void init();
