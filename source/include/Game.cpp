@@ -8,6 +8,55 @@
 using namespace std;
 
 Game::Game(int argc, char** argv) {
+	this->option = {
+		{"NORMAL1", 1}, {"RAPIDO", 0},
+		{"TURBO", 0}, {"20x10", 1},
+		{"30x15", 0}, {"50x25", 0},
+		{"Cores1", 1}, {"Cores2", 0},
+		{"Cores3", 0}, {"NORMAL2", 1}, {"BEBADO", 0}
+	};
+	this->selecN = {
+		{"INICIAR", make_pair(0, 1)}, {"NORMAL1", make_pair(1, 0)},
+		{"RAPIDO", make_pair(2, 0)}, {"TURBO", make_pair(3, 0)},
+		{"20x10", make_pair(4, 0)}, {"30x15", make_pair(5, 0)},
+		{"50x25", make_pair(6, 0)}, {"Cores1", make_pair(7, 0)},
+		{"Cores2", make_pair(8, 0)}, {"Cores3", make_pair(9, 0)},
+		{"NORMAL2", make_pair(10, 0)}, {"BEBADO", make_pair(11, 0)}, {"SAIR", make_pair(12, 0)}
+	};
+	this->selecI = {
+		{0, "INICIAR"}, {1, "NORMAL1"},
+		{2, "RAPIDO"}, {3, "TURBO"},
+		{4, "20x10"}, {5, "30x15"},
+		{6, "50x25"}, {7, "Cores1"},
+		{8, "Cores2"}, {9, "Cores3"},
+		{10, "NORMAL2"}, {11, "BEBADO"}, {12, "SAIR"}
+	};
+	this->colors = {
+		{"Cores1", {
+			{"Box", {0.0, 0.0, 0.0}},
+			{"BoxBack", {0.0, 0.0, 0.0}},
+			{"Text", {1.0, 0.0, 0.0}},
+			{"Background", {1.0, 1.0, 0.0}},
+			{"Piece", {0.0, 0.0, 0.0}}}
+		},
+		{"Cores2", {
+			{"Box", {0.015, 0.34, 0.87}},
+			{"BoxBack", {0.0, 0.0, 0.0}},
+			{"Text", {0.0, 1.0, 0.0}},
+			{"Background", {1.0, 1.0, 1.0}},
+			{"Piece", {0.015, 0.34, 0.87}}}
+		},
+		{"Cores3", {
+			{"Box", {0.0, 0.0, 0.0}},
+			{"BoxBack", {0.0, 0.0, 0.0}},
+			{"Text", {1.0, 1.0, 0.0}},
+			{"Background", {1.0, 0.0, 0.0}},
+			{"Piece", {0.0, 0.0, 0.0}}}
+		}
+	};
+	this->cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
+	this->menu = new Menu(colors, p0, p1, cor, option, selecN, view_w, view_h);
+	this->play = new Play(colors, p0, p1, cor, option, view_w, view_h, state, gameRunning);
 	glutInit(&argc, argv);
 	init();
 	glutDisplayFunc(display);
@@ -56,15 +105,15 @@ void Game::display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	updateVariables();
 	if(state == 0)
-		renderMenu();
+		menu.renderMenu();
 	else if(state == 1) {
 		if(!gameRunning) {
 			srand(time(NULL));
-			configVars();
-			configGame();
+			play.configVars();
+			play.configGame();
 			gameRunning = 1;
 		}
-		renderGameFrame();
+		play.renderGameFrame();
 	} else if(state == 2) {
 		usleep(3000000);
 		state = 0;
@@ -346,7 +395,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x,
 					// cout << "n(" << x - view_w << ", " <<  view_h - y <<
 					// ")\n";
 					const string cursorSelec =
-					    mousePointer(x - view_w, view_h - y);
+					    menu.mousePointer(x - view_w, view_h - y);
 					if(cursorSelec.length()) {
 						if(cursorSelec == "INICIAR")
 							state = 1;
@@ -390,7 +439,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x,
 void Game::MousePassiveMotion(const int x, const int y) {
 	if(state == 0) {
 		// cout << "n(" << x - view_w << ", " <<  view_h - y << ")\n";
-		const string cursorSelec = mousePointer(x - view_w, view_h - y);
+		const string cursorSelec = menu.mousePointer(x - view_w, view_h - y);
 		if(cursorSelec.length()) {
 			for(auto value : optNames) {
 				selecN[value].second = 0;

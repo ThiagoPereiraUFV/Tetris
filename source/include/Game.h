@@ -2,16 +2,27 @@
 #define GAME_H
 
 #include <GL/glut.h>
+#include <unistd.h>
 #include <cstdlib>
 #include <unordered_map>
 #include <vector>
 
+#include "Menu.h"
+#include "Play.h"
+
+// -------- Tamanho inicial da janela --------
+
+#define WINDOW_WIDTH 500   //	Largura inicial
+#define WINDOW_HEIGHT 600  //	Altura inicial
+
 class Game {
    private:
-      int state;  //   0 - menu, 1 - jogo, 2 - derrota e qualquer outro encerramento do jogo
-      int selec;  //   0 a 12 representam o botao esta selecionado
-      bool gameRunning;  //  0 - nao, 1 - sim
-      GLfloat view_w, view_h;  //  Os valores representam a metade do tamanho atual da janela
+      Menu menu;
+      Play play;
+      int state = 0;  //   0 - menu, 1 - jogo, 2 - derrota e qualquer outro encerramento do jogo
+      int selec = 0;  //   0 a 12 representam o botao esta selecionado
+      bool gameRunning = 0;  //  0 - nao, 1 - sim
+      GLfloat view_w = WINDOW_WIDTH/2, view_h = WINDOW_HEIGHT/2;  //  Os valores representam a metade do tamanho atual da janela
       pair<GLfloat, GLfloat> p0;  //	Ponto inferior esquerdo retangulo do menu
       pair<GLfloat, GLfloat> p1;  //   Ponto superior direito retangulo do menu
       unordered_map<string, bool> option; // Map usado para determinar a opcao selecionada que ira configurar o jogo

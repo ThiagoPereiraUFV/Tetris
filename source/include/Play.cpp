@@ -1,6 +1,23 @@
 #include "Play.h"
 using namespace std;
 
+Play::Play(
+		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
+		const pair<GLfloat, GLfloat> &p0, const pair<GLfloat, GLfloat> &p1,
+		const string &cor, const unordered_map<string, bool> &option,
+		const GLfloat &view_w, const GLfloat &view_h,
+		const int &state, const bool &gameRunning) {
+	this->state = state;
+	this->gameRunning = gameRunning;
+	this->colors = colors;
+	this->p0 = p0;
+	this->p1 = p1;
+	this->cor = cor;
+	this->option = option;
+	this->view_w = view_w;
+	this->view_h = view_h;
+}
+
 //	Funcao utilizada para rotacionar o tabuleiro no modo bebado
 void Play::spinDisplay(const int x) {
 	spin = spin + 5.0;
