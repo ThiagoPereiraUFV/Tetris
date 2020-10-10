@@ -1,63 +1,89 @@
-#include "Game.h"
+#include <GL/glut.h>
+#include <unistd.h>
+#include <cstdlib>
+#include <unordered_map>
+#include <vector>
+
+#include "Menu.h"
+#include "Play.h"
 
 using namespace std;
 
-Game::Game(int argc, char** argv) {
-	this->state = 0;
-	this->selec = 0;
-	this->gameRunning = false;
-	this->view_w = WINDOW_WIDTH/2;
-	this->view_h = WINDOW_HEIGHT/2;
-	this->option = {
-		{"NORMAL1", 1}, {"RAPIDO", 0},
-		{"TURBO", 0}, {"20x10", 1},
-		{"30x15", 0}, {"50x25", 0},
-		{"Cores1", 1}, {"Cores2", 0},
-		{"Cores3", 0}, {"NORMAL2", 1}, {"BEBADO", 0}
-	};
-	this->selecN = {
-		{"INICIAR", make_pair(0, 1)}, {"NORMAL1", make_pair(1, 0)},
-		{"RAPIDO", make_pair(2, 0)}, {"TURBO", make_pair(3, 0)},
-		{"20x10", make_pair(4, 0)}, {"30x15", make_pair(5, 0)},
-		{"50x25", make_pair(6, 0)}, {"Cores1", make_pair(7, 0)},
-		{"Cores2", make_pair(8, 0)}, {"Cores3", make_pair(9, 0)},
-		{"NORMAL2", make_pair(10, 0)}, {"BEBADO", make_pair(11, 0)}, {"SAIR", make_pair(12, 0)}
-	};
-	this->selecI = {
-		{0, "INICIAR"}, {1, "NORMAL1"},
-		{2, "RAPIDO"}, {3, "TURBO"},
-		{4, "20x10"}, {5, "30x15"},
-		{6, "50x25"}, {7, "Cores1"},
-		{8, "Cores2"}, {9, "Cores3"},
-		{10, "NORMAL2"}, {11, "BEBADO"}, {12, "SAIR"}
-	};
-	this->colors = {
-		{"Cores1", {
-			{"Box", {0.0, 0.0, 0.0}},
-			{"BoxBack", {0.0, 0.0, 0.0}},
-			{"Text", {1.0, 0.0, 0.0}},
-			{"Background", {1.0, 1.0, 0.0}},
-			{"Piece", {0.0, 0.0, 0.0}}}
-		},
-		{"Cores2", {
-			{"Box", {0.015, 0.34, 0.87}},
-			{"BoxBack", {0.0, 0.0, 0.0}},
-			{"Text", {0.0, 1.0, 0.0}},
-			{"Background", {1.0, 1.0, 1.0}},
-			{"Piece", {0.015, 0.34, 0.87}}}
-		},
-		{"Cores3", {
-			{"Box", {0.0, 0.0, 0.0}},
-			{"BoxBack", {0.0, 0.0, 0.0}},
-			{"Text", {1.0, 1.0, 0.0}},
-			{"Background", {1.0, 0.0, 0.0}},
-			{"Piece", {0.0, 0.0, 0.0}}}
-		}
-	};
-	this->cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
-	this->menu = new Menu(colors, p0, p1, cor, option, selecN, view_w, view_h);
-	this->play = new Play(colors, p0, p1, cor, option, view_w, view_h, state, gameRunning);
+// -------- Tamanho inicial da janela --------
 
+#define WINDOW_WIDTH 500   //	Largura inicial
+#define WINDOW_HEIGHT 600  //	Altura inicial
+
+int state = 0;	//	0 representa o menu, 1 representa jogo, 2 representa derrota no jogo e qualquer outro representa encerramento do jogo
+int selec = 0;  //  Os valores de 0 a 12 representam qual botao esta selecionado
+bool gameRunning = 0;   //  Determina se o jogo ja foi iniciado, 0 nao, 1 sim
+GLfloat view_w = WINDOW_WIDTH/2, view_h = WINDOW_HEIGHT/2;  //  Os valores representam a metade do tamanho atual da janela
+pair<GLfloat, GLfloat> p0(-view_h*0.1, -view_h*0.1);	//	Ponto inferior esquerdo retangulo do menu
+pair<GLfloat, GLfloat> p1(view_h*0.3, view_h*0.03);		//	Ponto superior direito retangulo do menu
+unordered_map<string, bool> option{
+	{"NORMAL1", 1}, {"RAPIDO", 0},
+	{"TURBO", 0}, {"20x10", 1},
+	{"30x15", 0}, {"50x25", 0},
+	{"Cores1", 1}, {"Cores2", 0},
+	{"Cores3", 0}, {"NORMAL2", 1}, {"BEBADO", 0}
+}; // Map usado para determinar a opcao selecionada que ira configurar o jogo
+unordered_map<string, pair<int, bool>> selecN{
+	{"INICIAR", make_pair(0, 1)}, {"NORMAL1", make_pair(1, 0)},
+	{"RAPIDO", make_pair(2, 0)}, {"TURBO", make_pair(3, 0)},
+	{"20x10", make_pair(4, 0)}, {"30x15", make_pair(5, 0)},
+	{"50x25", make_pair(6, 0)}, {"Cores1", make_pair(7, 0)},
+	{"Cores2", make_pair(8, 0)}, {"Cores3", make_pair(9, 0)},
+	{"NORMAL2", make_pair(10, 0)}, {"BEBADO", make_pair(11, 0)}, {"SAIR", make_pair(12, 0)}
+};  // Map usado para mapear o nome do botao ao seu numero e se esta selecionado
+unordered_map<int, string> selecI{
+	{0, "INICIAR"}, {1, "NORMAL1"},
+	{2, "RAPIDO"}, {3, "TURBO"},
+	{4, "20x10"}, {5, "30x15"},
+	{6, "50x25"}, {7, "Cores1"},
+	{8, "Cores2"}, {9, "Cores3"},
+	{10, "NORMAL2"}, {11, "BEBADO"}, {12, "SAIR"}
+};  //  Map usado para mapear o numero do botao ao nome
+vector<string> optNames{
+	"INICIAR", "NORMAL1", "RAPIDO", "TURBO", "20x10", "30x15",
+	"50x25", "Cores1", "Cores2", "Cores3", "NORMAL2", "BEBADO", "SAIR"
+};	//  Vetor com o nome dos botoes, NORMAL1 e NORMAL2 sao excecoes pois causam conflito ao usar um map
+unordered_map<string, unordered_map<string, vector<GLfloat>>> colors = {
+	{"Cores1", {
+		{"Box", {0.0, 0.0, 0.0}},
+		{"BoxBack", {0.0, 0.0, 0.0}},
+		{"Text", {1.0, 0.0, 0.0}},
+		{"Background", {1.0, 1.0, 0.0}},
+		{"Piece", {0.0, 0.0, 0.0}}}
+	},
+	{"Cores2", {
+		{"Box", {0.015, 0.34, 0.87}},
+		{"BoxBack", {0.0, 0.0, 0.0}},
+		{"Text", {0.0, 1.0, 0.0}},
+		{"Background", {1.0, 1.0, 1.0}},
+		{"Piece", {0.015, 0.34, 0.87}}}
+	},
+	{"Cores3", {
+		{"Box", {0.0, 0.0, 0.0}},
+		{"BoxBack", {0.0, 0.0, 0.0}},
+		{"Text", {1.0, 1.0, 0.0}},
+		{"Background", {1.0, 0.0, 0.0}},
+		{"Piece", {0.0, 0.0, 0.0}}}
+	}
+};  //	Map usado para representar o esquema de cores selecionado
+string cor =
+	(option["Cores1"]) ?
+		"Cores1"
+		:
+		(option["Cores2"]) ?
+			"Cores2"
+			:
+			"Cores3";	//	String que define qual esquema de cores foi selecionado
+char ultimaTecla;	//	Auxiliar
+
+Menu menu(colors, p0, p1, cor, option, selecN, view_w, view_h, optNames);
+Play play(colors, p0, p1, cor, option, view_w, view_h, state, gameRunning);
+
+void game(int argc, char** argv) {
 	glutInit(&argc, argv);
 	init();
 	glutDisplayFunc(display);
@@ -70,39 +96,19 @@ Game::Game(int argc, char** argv) {
 }
 
 //	Funcao utilizada para atualizar variaveis importantes que dependem do tamanho atual da janela por exemplo
-void Game::updateVariables() {
+void updateVariables() {
 	p0 = make_pair(-view_h * 0.1, -view_h * 0.1);
 	p1 = make_pair(view_h * 0.3, view_h * 0.03);
-	boxPos = {
-	    {"INICIAR", make_pair(-(p0.first + p1.first) / 2, view_h * 0.8)},
-	    {"NORMAL1",
-	     make_pair(-(p0.first + p1.first) / 2 - view_h * 0.45, view_h * 0.5)},
-	    {"RAPIDO", make_pair(-(p0.first + p1.first) / 2, view_h * 0.5)},
-	    {"TURBO", make_pair(-1 * ((p0.first + p1.first) / 2 - view_h * 0.45),
-	                        view_h * 0.5)},
-	    {"20x10",
-	     make_pair(-(p0.first + p1.first) / 2 - view_h * 0.45, view_h * 0.2)},
-	    {"30x15", make_pair(-(p0.first + p1.first) / 2, view_h * 0.2)},
-	    {"50x25", make_pair(-1 * ((p0.first + p1.first) / 2 - view_h * 0.45),
-	                        view_h * 0.2)},
-	    {"Cores1",
-	     make_pair(-(p0.first + p1.first) / 2 - view_h * 0.45, -view_h * 0.1)},
-	    {"Cores2", make_pair(-(p0.first + p1.first) / 2, -view_h * 0.1)},
-	    {"Cores3", make_pair(-1 * ((p0.first + p1.first) / 2 - view_h * 0.45),
-	                         -view_h * 0.1)},
-	    {"NORMAL2",
-	     make_pair(-(p0.first + p1.first) / 2 - view_h * 0.25, -view_h * 0.4)},
-	    {"BEBADO", make_pair(-1 * ((p0.first + p1.first) / 2 - view_h * 0.25),
-	                         -view_h * 0.4)},
-	    {"SAIR", make_pair(-(p0.first + p1.first) / 2, -view_h * 0.7)}};
 	cor = (option["Cores1"]) ? "Cores1"
 	                         : (option["Cores2"]) ? "Cores2" : "Cores3";
+	menu.updateView(view_w, view_h);
+	menu.updateColor(cor);
 	glClearColor(colors[cor]["Background"][0], colors[cor]["Background"][1],
 	             colors[cor]["Background"][2], 1.0);
 }
 
 //	Funcao principal para renderizar os graficos do jogo
-void Game::display() {
+void display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	updateVariables();
 	if(state == 0)
@@ -136,7 +142,7 @@ void Game::display() {
 
 //	Funcao para redimensionar os objetos desenhados na tela e mantelos na mesma
 // proporcao da janela
-void Game::reshape(const GLsizei w, const GLsizei h) {
+void reshape(const GLsizei w, const GLsizei h) {
 	view_w = w / 2;
 	view_h = h / 2;
 	updateVariables();
@@ -149,7 +155,7 @@ void Game::reshape(const GLsizei w, const GLsizei h) {
 
 //	Funcao utilizada para tratar o uso das setas direcionais no menu ou durante
 // o jogo
-void Game::SpecialKeys(const int key, const int x, const int y) {
+void SpecialKeys(const int key, const int x, const int y) {
 	if(state == 0) {
 		switch(key) {
 			case GLUT_KEY_UP:
@@ -338,7 +344,7 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 
 //	Funcao utilizada para tratar o uso das teclas enter, esc e spacebar no menu
 // ou durante o jogos
-void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
+void HandleKeyboard(const unsigned char key, const int x, const int y) {
 	if(state == 0)
 		switch(key) {
 			case 13:
@@ -387,7 +393,7 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 }
 
 //	Funcao utilizada para tratar o uso do mouse ao selecionar as opcoes do menu
-void Game::HandleMouse(const int button, const int btnState, const int x,
+void HandleMouse(const int button, const int btnState, const int x,
                  const int y) {
 	if(state == 0)
 		switch(button) {
@@ -437,7 +443,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x,
 
 //	Funcao utilizada para tratar do posicionamento do retangulo de selecao
 // durante o uso do mouse no menu
-void Game::MousePassiveMotion(const int x, const int y) {
+void MousePassiveMotion(const int x, const int y) {
 	if(state == 0) {
 		// cout << "n(" << x - view_w << ", " <<  view_h - y << ")\n";
 		const string cursorSelec = menu.mousePointer(x - view_w, view_h - y);
@@ -454,7 +460,7 @@ void Game::MousePassiveMotion(const int x, const int y) {
 
 //	Funcao utilizada para inicializar algumas funcoes do openGl e ajustar
 // posicao, largura e altura da janela
-void Game::init() {
+void init() {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 	glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WINDOW_WIDTH) / 2,

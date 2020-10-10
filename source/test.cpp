@@ -1,8 +1,8 @@
 #include <iostream>
-#include "include/Game.h"
+#include "include/Game.cpp"
 
 int main(int argc, char** argv) {
-	Game game(argc, argv);
+	game(argc, argv);
 
 	return 0;
 }
