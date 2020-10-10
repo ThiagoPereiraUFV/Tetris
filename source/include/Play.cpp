@@ -7,6 +7,7 @@ Play::Play(
 		const string &cor, const unordered_map<string, bool> &option,
 		const GLfloat &view_w, const GLfloat &view_h,
 		const int &state, const bool &gameRunning) {
+	this->spin = 0.0;
 	this->state = state;
 	this->gameRunning = gameRunning;
 	this->colors = colors;
@@ -16,6 +17,21 @@ Play::Play(
 	this->option = option;
 	this->view_w = view_w;
 	this->view_h = view_h;
+}
+
+Play &Play::operator=(const Play *o) {
+	this->spin = o->spin;
+	this->state = o->state;
+	this->gameRunning = o->gameRunning;
+	this->colors = o->colors;
+	this->p0 = o->p0;
+	this->p1 = o->p1;
+	this->cor = o->cor;
+	this->option = o->option;
+	this->view_w = o->view_w;
+	this->view_h = o->view_h;
+
+	return *this;
 }
 
 //	Funcao utilizada para rotacionar o tabuleiro no modo bebado

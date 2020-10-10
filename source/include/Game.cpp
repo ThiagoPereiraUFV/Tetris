@@ -1,13 +1,13 @@
 #include "Game.h"
 
-// -------- Tamanho inicial da janela --------
-
-#define WINDOW_WIDTH 500   //	Largura inicial
-#define WINDOW_HEIGHT 600  //	Altura inicial
-
 using namespace std;
 
 Game::Game(int argc, char** argv) {
+	this->state = 0;
+	this->selec = 0;
+	this->gameRunning = false;
+	this->view_w = WINDOW_WIDTH/2;
+	this->view_h = WINDOW_HEIGHT/2;
 	this->option = {
 		{"NORMAL1", 1}, {"RAPIDO", 0},
 		{"TURBO", 0}, {"20x10", 1},

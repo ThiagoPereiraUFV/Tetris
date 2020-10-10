@@ -15,6 +15,8 @@ Menu::Menu(
 	this->selecN = selecN;
 	this->view_w = view_w;
 	this->view_h = view_h;
+	this->sxmenu = view_h*0.0003;
+	this->symenu = view_h*0.0004;
 	this->boxPos = {
 		{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)},
 		{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)},
@@ -33,6 +35,23 @@ Menu::Menu(
 	this->optNames = {
 		"INICIAR", "NORMAL1", "RAPIDO", "TURBO", "20x10", "30x15",
 		"50x25", "Cores1", "Cores2", "Cores3", "NORMAL2", "BEBADO", "SAIR"};
+}
+
+Menu &Menu::operator=(const Menu *o) {
+	this->colors = o->colors;
+	this->p0 = o->p0;
+	this->p1 = o->p1;
+	this->cor = o->cor;
+	this->option = o->option;
+	this->selecN = o->selecN;
+	this->view_w = o->view_w;
+	this->view_h = o->view_h;
+	this->boxPos = o->boxPos;
+	this->optNames = o->optNames;
+	this->sxmenu = o->sxmenu;
+	this->symenu = o->symenu;
+
+	return *this;
 }
 
 //	Funcao utilizada para definir sobre qual botao o ponteiro do mouse se encontra
