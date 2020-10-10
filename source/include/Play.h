@@ -41,6 +41,7 @@ class Play {
 		void renderGameFrame();
 		void configGame();
 		void configVars();
+		void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);
 };
 
 #endif

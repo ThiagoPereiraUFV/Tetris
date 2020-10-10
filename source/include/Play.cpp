@@ -182,3 +182,22 @@ void Play::configVars() {
 		glutTimerFunc(100, spinDisplay, 0);
 	}
 }
+
+//	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
+void Play::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy,
+			  const string text) {
+	glPointSize(1);
+	glLineWidth(2);
+	string out = text;
+	if(out == "NORMAL1" || out == "NORMAL2")
+		out = "NORMAL";
+	glColor3f(colors[cor]["Text"][0], colors[cor]["Text"][1],
+			  colors[cor]["Text"][2]);
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	glScalef(sx, sy, 1.0);
+	for(int i = 0; i < out.length(); ++i) {
+		glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, out[i]);
+	}
+	glPopMatrix();
+}
