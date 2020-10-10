@@ -83,26 +83,11 @@ char ultimaTecla;	//	Auxiliar
 Menu menu(colors, p0, p1, cor, option, selecN, view_w, view_h, optNames);
 Play play(colors, p0, p1, cor, option, view_w, view_h, state, gameRunning);
 
-void game(int argc, char** argv) {
-	glutInit(&argc, argv);
-	init();
-	glutDisplayFunc(display);
-	glutReshapeFunc(reshape);
-	glutSpecialFunc(SpecialKeys);
-	glutKeyboardFunc(HandleKeyboard);
-	glutMouseFunc(HandleMouse);
-	glutPassiveMotionFunc(MousePassiveMotion);
-	glutMainLoop();
-}
-
 //	Funcao utilizada para atualizar variaveis importantes que dependem do tamanho atual da janela por exemplo
 void updateVariables() {
 	p0 = make_pair(-view_h * 0.1, -view_h * 0.1);
 	p1 = make_pair(view_h * 0.3, view_h * 0.03);
-	cor = (option["Cores1"]) ? "Cores1"
-	                         : (option["Cores2"]) ? "Cores2" : "Cores3";
 	menu.updateView(view_w, view_h);
-	menu.updateColor(cor);
 	glClearColor(colors[cor]["Background"][0], colors[cor]["Background"][1],
 	             colors[cor]["Background"][2], 1.0);
 }
@@ -468,4 +453,16 @@ void init() {
 	glutCreateWindow("Tetris v1.0 by Thiago Pereira");
 	glClearColor(colors[cor]["Background"][0], colors[cor]["Background"][1],
 	             colors[cor]["Background"][2], 1.0);
+}
+
+void game(int argc, char** argv) {
+	glutInit(&argc, argv);
+	init();
+	glutDisplayFunc(display);
+	glutReshapeFunc(reshape);
+	glutSpecialFunc(SpecialKeys);
+	glutKeyboardFunc(HandleKeyboard);
+	glutMouseFunc(HandleMouse);
+	glutPassiveMotionFunc(MousePassiveMotion);
+	glutMainLoop();
 }

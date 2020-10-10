@@ -69,8 +69,7 @@ void Play::exibeObjeto(const GLint x, const GLint y, const char c) {
 void Play::exibeJogo() {
 	for(int i = 0; i < alturaMaximaJogo; i++)
 		for(int j = 0; j < larguraJogo; j++)
-			exibeObjeto(j, alturaMaximaJogo - i - 1,
-			            jogoComPecaCaindo.get(j, alturaMaximaJogo - i - 1));
+			exibeObjeto(j, alturaMaximaJogo - i - 1, jogoComPecaCaindo.get(j, alturaMaximaJogo - i - 1));
 }
 
 //	Funcao utilizada para renderizar o frame atual do jogo e posicionar uma peca
