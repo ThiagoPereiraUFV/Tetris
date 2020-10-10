@@ -57,6 +57,7 @@ Game::Game(int argc, char** argv) {
 	this->cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 	this->menu = new Menu(colors, p0, p1, cor, option, selecN, view_w, view_h);
 	this->play = new Play(colors, p0, p1, cor, option, view_w, view_h, state, gameRunning);
+
 	glutInit(&argc, argv);
 	init();
 	glutDisplayFunc(display);

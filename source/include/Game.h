@@ -6,6 +6,9 @@
 #include <cstdlib>
 #include <unordered_map>
 #include <vector>
+#include <functional>
+
+using namespace std;
 
 // -------- Tamanho inicial da janela --------
 

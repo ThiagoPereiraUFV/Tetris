@@ -7,6 +7,8 @@
 #include <vector>
 #include <unordered_map>
 
+using namespace std;
+
 #include "Tetris.h"
 
 class Play {

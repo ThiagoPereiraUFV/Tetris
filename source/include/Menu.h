@@ -6,6 +6,8 @@
 #include <vector>
 #include <unordered_map>
 
+using namespace std;
+
 class Menu {
 	private:
 		GLfloat sxmenu, symenu;	//	Escala do texto do menu em x e y
