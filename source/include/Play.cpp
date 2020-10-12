@@ -7,7 +7,7 @@ Play::Play(
 		const string &cor, const unordered_map<string, bool> &option,
 		const GLfloat &view_w, const GLfloat &view_h,
 		const int &state, const bool &gameRunning) {
-	this->spin = 0.0;
+	spin = 0;
 	this->state = state;
 	this->gameRunning = gameRunning;
 	this->colors = colors;
@@ -17,6 +17,11 @@ Play::Play(
 	this->option = option;
 	this->view_w = view_w;
 	this->view_h = view_h;
+}
+
+Play::~Play() {
+	this->jogo.~Tetris();
+	this->jogoComPecaCaindo.~Tetris();
 }
 
 Play &Play::operator=(const Play *o) {
@@ -107,13 +112,10 @@ void Play::renderGameFrame() {
 			rotacaoPecaAtual = (rotacaoPecaAtual + 1) % 4;
 	}
 
-	if(jogoComPecaCaindo.adicionaForma(posicaoPecaAtual, alturaPecaAtual - 1,
-	                                   idPecaAtual,
-	                                   possiveisRotacoes[rotacaoPecaAtual])) {
+	if(jogoComPecaCaindo.adicionaForma(posicaoPecaAtual, alturaPecaAtual - 1, idPecaAtual, possiveisRotacoes[rotacaoPecaAtual])) {
 		alturaPecaAtual--;
 	} else {
-		jogo.adicionaForma(posicaoPecaAtual, alturaPecaAtual, idPecaAtual,
-		                   possiveisRotacoes[rotacaoPecaAtual]);
+		jogo.adicionaForma(posicaoPecaAtual, alturaPecaAtual, idPecaAtual, possiveisRotacoes[rotacaoPecaAtual]);
 		jogoComPecaCaindo = jogo;
 		idPecaAtual = "IJLOSTZ"[rand() % 7];
 		posicaoPecaAtual = larguraJogo / 2 - 2;
@@ -183,8 +185,7 @@ void Play::configVars() {
 }
 
 //	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
-void Play::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy,
-			  const string text) {
+void Play::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text) {
 	glPointSize(1);
 	glLineWidth(2);
 	string out = text;

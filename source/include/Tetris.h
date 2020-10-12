@@ -6,12 +6,13 @@
 class Tetris {
 	public:
 		Tetris(int largura);
+		Tetris();
 		friend std::ostream &operator<<(std::ostream &, const Tetris&);
 
 		void removeColuna(int col);
 		void removeLinhasCompletas();
 		int getNumColunas() const;
-		int getAltura() const; 
+		int getAltura() const;
 		int getAltura(int c) const {return alturas[c];}
 		bool adicionaForma(int posicao, int altura, char id, int rotacao);
 		char get(int coluna, int linha) const;

@@ -15,10 +15,10 @@ class Play {
 	private:
 		int state;  //   0 - menu, 1 - jogo, 2 - derrota e qualquer outro encerramento do jogo
 		bool gameRunning;  //  0 - nao, 1 - sim
-		GLfloat spin;  //	Define a rotacao do tabuleiro durante o modo bebado
+		static GLfloat spin;  //	Define a rotacao do tabuleiro durante o modo bebado
 		pair<int, int> tam;	//	Define o tamanho do tabuleiro
 		int vel, altura, alturaOld, pontos;	//	Define a velocidade, altura, altura anterior e pontos respectivamente
-		Tetris jogo(), jogoComPecaCaindo();	//	Define dois objetos do Tetris
+		Tetris jogo, jogoComPecaCaindo;	//	Define dois objetos do Tetris
 		const vector<GLint> possiveisRotacoes{0, 90, 180, 270};	//	Define as rotacoes disponiveis
 		int larguraJogo, alturaMaximaJogo, alturaPecaAtual, posicaoPecaAtual, rotacaoPecaAtual;	//	Auxiliares
 		char idPecaAtual, ultimaTecla;	//	Auxiliares
@@ -36,8 +36,9 @@ class Play {
 			const string &cor, const unordered_map<string, bool> &option,
 			const GLfloat &view_w, const GLfloat &view_h,
 			const int &state, const bool &gameRunning);
+		~Play();
 		Play &operator=(const Play *o);
-		void spinDisplay(const int x);
+		static void spinDisplay(const int x);
 		void exibeObjeto(const GLint x, const GLint y, const char c);
 		void exibeJogo();
 		void renderGameFrame();
