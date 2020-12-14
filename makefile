@@ -1,22 +1,25 @@
-#jogo: source/main.cpp
-	#g++  source/main.cpp source/include/Tetris.cpp -O3 -lglut -lGL -lGLU -lm -std=c++11 -lncurses -o main.out && ./main.out
+oglFlags = -O3 -lglut -lGL -lGLU
+ncursesFlags = -O3 -lncurses
+extraFlags = -c -O3
+includePath = ./source/include
 
-jogo: source/test.cpp
-	g++  source/test.cpp source/include/Game.cpp -O3 -lglut -lGL -lGLU -lm -std=c++11 -lncurses -o main.out && ./main.out
+Tetris: Menu.o Tetris.o Play.o Game.o
+	g++ ./source/test.cpp ./bin/*.o $(oglFlags) -o tetris.out
 
-all: program
+Menu.o:
+	g++ $(includePath)/Menu.cpp $(extraFlags) -o ./bin/Menu.o
 
-program: test.o Menu.o Play.o
-	g++ test.o Menu.o  Play.o -O3 -lglut -lGL -lGLU -lm -std=c++11 -lncurses -o program
+Tetris.o:
+	g++ $(includePath)/Tetris.cpp $(extraFlags) -o ./bin/Tetris.o
 
-test.o: source/test.cpp
-	g++ -c source/test.cpp -O3 -lglut -lGL -lGLU -lm -std=c++11
+Play.o:
+	g++ $(includePath)/Play.cpp $(extraFlags) -o ./bin/Play.o
 
-Menu.o: source/include/Menu.cpp
-	g++ -c source/include/Menu.cpp -O3 -lglut -lGL -lGLU -lm -std=c++11
+Game.o:
+	g++ $(includePath)/Game.cpp $(extraFlags) -o ./bin/Game.o
 
-Play.o: source/include/Play.cpp source/include/Tetris.cpp
-	g++ -c source/include/Play.cpp source/include/Tetris.cpp -O3 -lglut -lGL -lGLU -lm -lncurses -std=c++11
+start:
+	./tetris.out
 
 clean:
-	rm *.o
+	rm ./bin/*.o
