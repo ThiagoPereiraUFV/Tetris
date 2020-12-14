@@ -74,8 +74,7 @@ string Menu::mousePointer(const GLint x, const GLint y) {
 }
 
 //	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
-void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy,
-			  const string text) {
+void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text) {
 	glPointSize(1);
 	glLineWidth(2);
 	string out = text;
@@ -94,8 +93,7 @@ void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloa
 
 //	Funcao utilizada para desenhar um botao dada uma posicao e um texto
 void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
-	glColor3f(colors[cor]["BoxBack"][0], colors[cor]["BoxBack"][1],
-			  colors[cor]["BoxBack"][2]);
+	glColor3f(colors[cor]["BoxBack"][0], colors[cor]["BoxBack"][1], colors[cor]["BoxBack"][2]);
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glLineWidth(5);
@@ -138,29 +136,25 @@ void Menu::renderMenu() {
 	drawButton(boxPos[optNames[0]], optNames[0]);
 
 	//	Velocidade
-	drawText(-(p0.first + p1.first) / 2 - view_h * 0.05, view_h * 0.6, sxmenu,
-			 symenu, "VELOCIDADE");
+	drawText(-(p0.first + p1.first) / 2 - view_h * 0.05, view_h * 0.6, sxmenu, symenu, "VELOCIDADE");
 	drawButton(boxPos[optNames[1]], optNames[1]);
 	drawButton(boxPos[optNames[2]], optNames[2]);
 	drawButton(boxPos[optNames[3]], optNames[3]);
 
 	//	Tamanho
-	drawText(-(p0.first + p1.first) / 2, view_h * 0.3, sxmenu, symenu,
-			 "TAMANHO");
+	drawText(-(p0.first + p1.first) / 2, view_h * 0.3, sxmenu, symenu, "TAMANHO");
 	drawButton(boxPos[optNames[4]], optNames[4]);
 	drawButton(boxPos[optNames[5]], optNames[5]);
 	drawButton(boxPos[optNames[6]], optNames[6]);
 
 	//	Cores
-	drawText(-(p0.first + p1.first) / 2 + view_h * 0.02, view_h * 0.005, sxmenu,
-			 symenu, "CORES");
+	drawText(-(p0.first + p1.first) / 2 + view_h * 0.02, view_h * 0.005, sxmenu, symenu, "CORES");
 	drawButton(boxPos[optNames[7]], optNames[7]);
 	drawButton(boxPos[optNames[8]], optNames[8]);
 	drawButton(boxPos[optNames[9]], optNames[9]);
 
 	//	Modo
-	drawText(-(p0.first + p1.first) / 2 + view_h * 0.03, -view_h * 0.3, sxmenu,
-			 symenu, "MODO");
+	drawText(-(p0.first + p1.first) / 2 + view_h * 0.03, -view_h * 0.3, sxmenu, symenu, "MODO");
 	drawButton(boxPos[optNames[10]], optNames[10]);
 	drawButton(boxPos[optNames[11]], optNames[11]);
 
