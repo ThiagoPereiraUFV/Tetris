@@ -6,7 +6,7 @@
 class Tetris {
 	public:
 		Tetris(int largura);
-		Tetris();
+		Tetris() { };
 		friend std::ostream &operator<<(std::ostream &, const Tetris&);
 
 		void removeColuna(int col);

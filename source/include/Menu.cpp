@@ -3,13 +3,10 @@ using namespace std;
 
 Menu::Menu(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-		const pair<GLfloat, GLfloat> &p0, const pair<GLfloat, GLfloat> &p1,
 		const string &cor, const unordered_map<string, bool> &option,
 		const unordered_map<string, pair<int, bool>> &selecN,
-		const GLfloat &view_w, const GLfloat &view_h, const vector<string> optNames) {
+		const GLfloat &view_w, const GLfloat &view_h) {
 	this->colors = colors;
-	this->p0 = p0;
-	this->p1 = p1;
 	this->cor = cor;
 	this->option = option;
 	this->selecN = selecN;
@@ -17,6 +14,8 @@ Menu::Menu(
 	this->view_h = view_h;
 	this->sxmenu = view_h*0.0003;
 	this->symenu = view_h*0.0004;
+	this->p0 = make_pair(-view_h*0.1, -view_h*0.1);
+	this->p1 = make_pair(view_h*0.3, view_h*0.03);
 	this->boxPos = {
 		{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)},
 		{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)},
@@ -32,7 +31,6 @@ Menu::Menu(
 		{"BEBADO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.25), -view_h*0.4)},
 		{"SAIR", make_pair(-(p0.first+p1.first)/2, -view_h*0.7)}
 	};
-	this->optNames = optNames;
 }
 
 Menu &Menu::operator=(const Menu *o) {
@@ -45,7 +43,6 @@ Menu &Menu::operator=(const Menu *o) {
 	this->view_w = o->view_w;
 	this->view_h = o->view_h;
 	this->boxPos = o->boxPos;
-	this->optNames = o->optNames;
 	this->sxmenu = o->sxmenu;
 	this->symenu = o->symenu;
 
@@ -69,34 +66,6 @@ string Menu::mousePointer(const GLint x, const GLint y) {
 			return key;
 	}
 	return "";
-}
-
-
-void Menu::updateView(const GLfloat view_w, const GLfloat view_h) {
-	this->view_h = view_h;
-	this->view_w = view_w;
-
-	this->p0 = make_pair(-view_h * 0.1, -view_h * 0.1);
-	this->p1 = make_pair(view_h * 0.3, view_h * 0.03);
-	this->boxPos = {
-		{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)},
-		{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)},
-		{"RAPIDO", make_pair(-(p0.first+p1.first)/2, view_h*0.5)},
-		{"TURBO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), view_h*0.5)},
-		{"20x10", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.2)},
-		{"30x15", make_pair(-(p0.first+p1.first)/2, view_h*0.2)},
-		{"50x25", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), view_h*0.2)},
-		{"Cores1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, -view_h*0.1)},
-		{"Cores2", make_pair(-(p0.first+p1.first)/2, -view_h*0.1)},
-		{"Cores3", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), -view_h*0.1)},
-		{"NORMAL2", make_pair(-(p0.first+p1.first)/2 - view_h*0.25, -view_h*0.4)},
-		{"BEBADO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.25), -view_h*0.4)},
-		{"SAIR", make_pair(-(p0.first+p1.first)/2, -view_h*0.7)}
-	};
-}
-
-void Menu::updateColor(const string color) {
-	this->cor = color;
 }
 
 //	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
