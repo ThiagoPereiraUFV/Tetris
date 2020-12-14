@@ -1,5 +1,4 @@
 #include "Play.h"
-using namespace std;
 
 Play::Play(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
@@ -19,6 +18,8 @@ Play::Play(
 Play::~Play() {
 	this->jogo.~Tetris();
 	this->jogoComPecaCaindo.~Tetris();
+	this->colors.clear();
+	this->option.clear();
 }
 
 Play &Play::operator=(const Play *o) {

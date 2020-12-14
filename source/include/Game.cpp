@@ -1,12 +1,9 @@
 #include "Game.h"
 
-using namespace std;
-
 char Game::ultimaTecla = ' ';
 int Game::state = 0, Game::selec = 0;
 bool Game::gameRunning = false;
-GLfloat Game::view_w = WINDOW_WIDTH/2;
-GLfloat Game::view_h = WINDOW_HEIGHT/2;
+GLfloat Game::view_w = WINDOW_WIDTH/2, view_h = WINDOW_HEIGHT/2;
 unordered_map<string, bool> Game::option = {
 	{"NORMAL1", 1}, {"RAPIDO", 0},
 	{"TURBO", 0}, {"20x10", 1},
@@ -299,20 +296,20 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 				}
 				break;
 		}
-		updateVariables();
 	} else if(state == 1) {
 		switch(key) {
 			case GLUT_KEY_LEFT:
-				ultimaTecla = 'l';
+				play.setUltimaTecla('l');
 				break;
 			case GLUT_KEY_RIGHT:
-				ultimaTecla = 'r';
+				play.setUltimaTecla('r');
 				break;
 			case GLUT_KEY_DOWN:
-				ultimaTecla = 'a';
+				play.setUltimaTecla('a');
 				break;
 		}
 	}
+	updateVariables();
 	glutPostRedisplay();
 }
 
@@ -351,17 +348,17 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 				selec = selecN["SAIR"].first;
 				break;
 		}
-		updateVariables();
 	} else if(state == 1) {
 		switch(key) {
 			case 27:
 				state = 0;
 				gameRunning = 0;
 			case 32:
-				ultimaTecla = 's';
+				play.setUltimaTecla('s');
 				break;
 		}
 	}
+	updateVariables();
 	glutPostRedisplay();
 }
 
@@ -371,8 +368,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 		switch(button) {
 			case GLUT_LEFT_BUTTON:
 				if(btnState == GLUT_DOWN) {
-					// cout << "n(" << x - view_w << ", " <<  view_h - y <<
-					// ")\n";
+					// cout << "(" << x - view_w << ", " <<  view_h - y << ")\n";
 					const string cursorSelec = menu.mousePointer(x - view_w, view_h - y);
 					if(cursorSelec.length()) {
 						if(cursorSelec == "INICIAR")
@@ -409,8 +405,8 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 					}
 				}
 		}
-		updateVariables();
 	}
+	updateVariables();
 	glutPostRedisplay();
 }
 

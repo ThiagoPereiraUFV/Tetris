@@ -23,8 +23,7 @@ class Play {
 		int larguraJogo, alturaMaximaJogo, alturaPecaAtual, posicaoPecaAtual, rotacaoPecaAtual;	//	Auxiliares
 		char idPecaAtual, ultimaTecla;	//	Auxiliares
 		unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;	//	Map usado para representar o esquema de cores selecionado
-		pair<GLfloat, GLfloat> p0;	//	Ponto inferior esquerdo retangulo do menu
-		pair<GLfloat, GLfloat> p1;	//	Ponto superior direito retangulo do menu
+		pair<GLfloat, GLfloat> p0, p1;	//	Ponto inferior esquerdo retangulo e superior direito retangulo do menu
 		string cor;	//	String que define qual esquema de cores foi selecionado
 		unordered_map<string, bool> option;	//	Map usado para determinar a opcao selecionada que ira configurar o jogo
 		GLfloat view_w, view_h;	//  Os valores representam a metade do tamanho atual da janela
@@ -41,6 +40,7 @@ class Play {
 		void exibeObjeto(const GLint x, const GLint y, const char c);
 		void exibeJogo();
 		void renderGameFrame();
+		void setUltimaTecla(const char ultimaTecla) { this->ultimaTecla = ultimaTecla; }
 		void configGame();
 		void configVars();
 		void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);

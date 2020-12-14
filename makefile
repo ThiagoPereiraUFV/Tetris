@@ -4,7 +4,7 @@ extraFlags = -c -O3
 includePath = ./source/include
 
 Tetris: Menu.o Tetris.o Play.o Game.o
-	g++ ./source/test.cpp ./bin/*.o $(oglFlags) -o tetris.out
+	g++ ./source/main.cpp ./bin/*.o $(oglFlags) -o tetris.out
 
 Menu.o:
 	g++ $(includePath)/Menu.cpp $(extraFlags) -o ./bin/Menu.o
@@ -22,4 +22,4 @@ start:
 	./tetris.out
 
 clean:
-	rm ./bin/*.o
+	rm ./bin/*.o *.out

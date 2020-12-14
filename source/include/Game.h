@@ -28,8 +28,6 @@ class Game {
 		static string cor;	//	String que define qual esquema de cores foi selecionado
 		static char ultimaTecla;	//	Auxiliares
 		static GLfloat view_w, view_h;  //  Os valores representam a metade do tamanho atual da janela
-		static pair<GLfloat, GLfloat> p0;  //	Ponto inferior esquerdo retangulo do menu
-		static pair<GLfloat, GLfloat> p1;  //   Ponto superior direito retangulo do menu
 		static unordered_map<string, bool> option; // Map usado para determinar a opcao selecionada que ira configurar o jogo
 		static unordered_map<string, pair<int, bool>> selecN;  // Map usado para mapear o nome do botao ao seu numero e se esta selecionado
 		static unordered_map<int, string> selecI;  //  Map usado para mapear o numero do botao ao nome

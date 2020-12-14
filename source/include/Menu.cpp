@@ -1,5 +1,4 @@
 #include "Menu.h"
-using namespace std;
 
 Menu::Menu(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
@@ -31,6 +30,12 @@ Menu::Menu(
 		{"BEBADO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.25), -view_h*0.4)},
 		{"SAIR", make_pair(-(p0.first+p1.first)/2, -view_h*0.7)}
 	};
+}
+
+Menu::~Menu() {
+	this->colors.clear();
+	this->option.clear();
+	this->selecN.clear();
 }
 
 Menu &Menu::operator=(const Menu *o) {

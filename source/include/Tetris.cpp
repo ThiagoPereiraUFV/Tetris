@@ -88,7 +88,7 @@ void Tetris::removeLinhasCompletas() {
 			removeLinhaCompleta(i);
 			alturaMaxima--; //uma linha foi removida!
 			i--; //para testar a mesma linha denovo (ja que tabuleiro foi deslocado para baixo...)
-		}		
+		}
 	}
 }
 
@@ -158,15 +158,15 @@ void Tetris::rotateCW(char peca[4][5]) {
 }
 
 void imprimePeca(int rotacoes, const char peca[4][5]) {
-	system("clear");
+	int response = system("clear");
 	std::cout << "Rotacoes: " << rotacoes << std::endl;
 	for(int i = 0; i < 4; i++)
 		std::cout << peca[i] << std::endl;
-	system("sleep 0.9");
+	response = system("sleep 0.9");
 }
 
 bool Tetris::podeInserirPeca(int linhaMinimaInserir, const char peca[4][5], int posicao) const {
-	for(int c = 0; c < 4; c++) {	
+	for(int c = 0; c < 4; c++) {
 		for(int l = 0; l < 4; l++) {
 			if(peca[l][c] == ' ') continue;
 			//verifique se l,c colide com o jogo...
@@ -174,7 +174,7 @@ bool Tetris::podeInserirPeca(int linhaMinimaInserir, const char peca[4][5], int 
 			int cJogo = c+posicao;
 			if(lJogo < 0 || cJogo < 0 || cJogo >= getNumColunas()) return false;
 			if(lJogo < alturas[cJogo] && jogo[cJogo][lJogo] != ' ') return false;
-			
+
 		}
 	}
 	return true;
@@ -185,7 +185,7 @@ bool Tetris::adicionaForma(int posicao, int altura, const char peca[4][5]) {
 	if(!podeInserirPeca(linhaMinimaInserir, peca, posicao)) {
 		return false; //a insercao da peca falhou!
 	}
-	
+
 
 	//insere a peca...
 	for(int c = 0; c < 4; c++) {
@@ -199,7 +199,7 @@ bool Tetris::adicionaForma(int posicao, int altura, const char peca[4][5]) {
 			temPecaAdicionar = true;
 			//verifique se l,c colide com o jogo...
 			int lJogo = linhaMinimaInserir - l;
-			if(lJogo+1 > novaAlturaMaximaColuna) novaAlturaMaximaColuna = lJogo+1;			
+			if(lJogo+1 > novaAlturaMaximaColuna) novaAlturaMaximaColuna = lJogo+1;
 		}
 		if(!temPecaAdicionar) continue;
 
@@ -208,12 +208,12 @@ bool Tetris::adicionaForma(int posicao, int altura, const char peca[4][5]) {
 		for(int i = 0; i < alturas[cJogo]; i++) novaColunaJogo[i] = jogo[cJogo][i];
 
 		alturas[cJogo] = novaAlturaMaximaColuna;
-			
+
 		for(int l = 0; l < 4; l++) {
 			if(peca[l][c] == ' ') continue;
 			//verifique se l,c colide com o jogo...
 			int lJogo = linhaMinimaInserir - l;
-			novaColunaJogo[lJogo] = peca[l][c];			
+			novaColunaJogo[lJogo] = peca[l][c];
 		}
 
 		delete []jogo[cJogo];
@@ -272,16 +272,16 @@ bool Tetris::adicionaForma(int posicao, int altura, char id, int rotacao) {
 
 	char peca[4][5] = {0};
 	for(int i = 0; i < 4; i++) for(int j = 0; j < 4; j++) peca[i][j] = pecas[posPeca[id]][i][j];
-	
+
 	int numRotate = rotacao/90;
 	for(int i = 0; i < numRotate; i++)
 		rotateCW(peca);
 
-	return adicionaForma(posicao,altura, peca);	
+	return adicionaForma(posicao,altura, peca);
 }
 
 char Tetris::get(int coluna, int linha) const {
-	if(linha < 0 || linha >= alturas[coluna] || coluna >= largura || coluna<0) 
+	if(linha < 0 || linha >= alturas[coluna] || coluna >= largura || coluna<0)
 		return ' ';
 	return jogo[coluna][linha];
 }

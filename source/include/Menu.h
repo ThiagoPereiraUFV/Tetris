@@ -31,6 +31,7 @@ class Menu {
 			const string &cor, const unordered_map<string, bool> &option,
 			const unordered_map<string, pair<int, bool>> &selecN,
 			const GLfloat &view_w, const GLfloat &view_h);
+		~Menu();
 		Menu &operator=(const Menu *o);
 		string mousePointer(const GLint x, const GLint y);
 		void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);
