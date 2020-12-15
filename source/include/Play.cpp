@@ -176,6 +176,12 @@ void Play::configVars() {
 	}
 }
 
+//	Set view variables to keep window ratio
+void Play::setView(const GLfloat &view_w, const GLfloat &view_h) {
+	this->view_w = view_w;
+	this->view_h = view_h;
+}
+
 //	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
 void Play::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text) {
 	glPointSize(1);

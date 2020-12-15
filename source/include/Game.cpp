@@ -65,7 +65,7 @@ void Game::game(int argc, char** argv) {
 	glutMainLoop();
 }
 
-//	Funcao utilizada para atualizar variaveis importantes que dependem do tamanho atual da janela por exemplo
+//	Update important variables
 void Game::updateVariables() {
 	cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 	glClearColor(
@@ -75,30 +75,40 @@ void Game::updateVariables() {
 	);
 
 	menu = new Menu(colors, cor, option, selecN, view_w, view_h);
-	play = new Play(colors, cor, option, view_w, view_h, state);
+	play.setView(view_w, view_h);
 }
 
-//	Funcao principal para renderizar os graficos do jogo
+//	Render game elements
 void Game::display() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	updateVariables();
-	if(state == 0) {
-		menu.renderMenu();
-	} else if(state == 1) {
-		srand(time(NULL));
-		play.configVars();
-		play.configGame();
-		state = 2;
-		play.setState(state);
-	} else if(state == 2) {
-		play.renderGameFrame();
-		state = play.getState();
-	} else if(state == 3) {
-		usleep(3000000);
-		state = 0;
-	} else {
-		exit(0);
+
+	switch(state) {
+		case 0:
+			menu.renderMenu();
+			break;
+		case 1:
+			srand(time(NULL));
+			play.configVars();
+			play.configGame();
+			state = 2;
+			play.setState(state);
+			break;
+		case 2:
+			play.renderGameFrame();
+			state = play.getState();
+			break;
+		case 3:
+			usleep(3000000);
+			state = 0;
+			break;
+		default:
+			play.~Play();
+			menu.~Menu();
+			exit(0);
+			break;
 	}
+
 	/*
 	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_LINES);
@@ -108,11 +118,12 @@ void Game::display() {
 		glVertex2f(-view_w, 0);
 	glEnd();
 	*/
+
 	glutSwapBuffers();
 	glutPostRedisplay();
 }
 
-//	Redimensiona os objetos desenhados na tela e mantelos na mesma proporcao da janela
+//	Resize game elements to keep ratio
 void Game::reshape(const GLsizei w, const GLsizei h) {
 	view_w = w / 2;
 	view_h = h / 2;
@@ -124,8 +135,7 @@ void Game::reshape(const GLsizei w, const GLsizei h) {
 	glutPostRedisplay();
 }
 
-//	Funcao utilizada para tratar o uso das setas direcionais no menu ou durante
-// o jogo
+//	Handle arrow keys events
 void Game::SpecialKeys(const int key, const int x, const int y) {
 	if(state == 0) {
 		switch(key) {
@@ -313,27 +323,21 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 	glutPostRedisplay();
 }
 
-//	Trata o uso das teclas enter, esc e spacebar no menu ou durante o jogos
+//	Handle enter, esc e spacebar events
 void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 	if(state == 0) {
 		switch(key) {
 			case 13:
-				if(selecI[selec] == "NORMAL1" || selecI[selec] == "RAPIDO" ||
-				   selecI[selec] == "TURBO") {
+				if(selecI[selec] == "NORMAL1" || selecI[selec] == "RAPIDO" || selecI[selec] == "TURBO") {
 					option["NORMAL1"] = option["RAPIDO"] = option["TURBO"] = 0;
 					option[selecI[selec]] = 1;
-				} else if(selecI[selec] == "20x10" ||
-						  selecI[selec] == "30x15" ||
-						  selecI[selec] == "50x25") {
+				} else if(selecI[selec] == "20x10" || selecI[selec] == "30x15" || selecI[selec] == "50x25") {
 					option["20x10"] = option["30x15"] = option["50x25"] = 0;
 					option[selecI[selec]] = 1;
-				} else if(selecI[selec] == "Cores1" ||
-						  selecI[selec] == "Cores2" ||
-						  selecI[selec] == "Cores3") {
+				} else if(selecI[selec] == "Cores1" || selecI[selec] == "Cores2" || selecI[selec] == "Cores3") {
 					option["Cores1"] = option["Cores2"] = option["Cores3"] = 0;
 					option[selecI[selec]] = 1;
-				} else if(selecI[selec] == "NORMAL2" ||
-						  selecI[selec] == "BEBADO") {
+				} else if(selecI[selec] == "NORMAL2" || selecI[selec] == "BEBADO") {
 					option["NORMAL2"] = option["BEBADO"] = 0;
 					option[selecI[selec]] = 1;
 				}
@@ -361,7 +365,7 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 	glutPostRedisplay();
 }
 
-//	Funcao utilizada para tratar o uso do mouse ao selecionar as opcoes do menu
+//	Handle mouse click events
 void Game::HandleMouse(const int button, const int btnState, const int x, const int y) {
 	if(state == 0) {
 		switch(button) {
@@ -409,7 +413,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 	glutPostRedisplay();
 }
 
-//	Trata do posicionamento do retangulo de selecao durante o uso do mouse no menu
+//	Handle mouse selection events
 void Game::MousePassiveMotion(const int x, const int y) {
 	if(state == 0) {
 		const string cursorSelec = menu.mousePointer(x - view_w, view_h - y);
@@ -422,7 +426,7 @@ void Game::MousePassiveMotion(const int x, const int y) {
 	glutPostRedisplay();
 }
 
-//	Inicializar funcoes do openGl e ajustar posicao, largura e altura da janela
+//	Set up OpenGl and start
 void Game::init() {
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);

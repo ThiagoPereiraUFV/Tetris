@@ -38,9 +38,10 @@ class Play {
 		void exibeObjeto(const GLint x, const GLint y, const char c);
 		void exibeJogo();
 		void renderGameFrame();
-		void setUltimaTecla(const char ultimaTecla) { this->ultimaTecla = ultimaTecla; }
 		int getState() const { return this->state; }
-		void setState(const int state) { this->state = state; }
+		void setState(const int &state) { this->state = state; }
+		void setUltimaTecla(const char ultimaTecla) { this->ultimaTecla = ultimaTecla; }
+		void setView(const GLfloat &view_w, const GLfloat &view_h);
 		void configGame();
 		void configVars();
 		void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);
