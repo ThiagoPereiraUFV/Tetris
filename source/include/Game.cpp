@@ -435,4 +435,5 @@ void Game::init() {
 		(glutGet(GLUT_SCREEN_HEIGHT) - WINDOW_HEIGHT) / 2
 	);
 	glutCreateWindow("Tetris v1.0 by Thiago Pereira");
+	glutFullScreen();
 }
