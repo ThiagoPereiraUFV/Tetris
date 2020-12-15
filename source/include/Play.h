@@ -14,7 +14,6 @@ using namespace std;
 class Play {
 	private:
 		int state;  //   0 - menu, 1 - jogo, 2 - derrota e qualquer outro encerramento do jogo
-		bool gameRunning;  //  0 - nao, 1 - sim
 		GLfloat spin;  //	Define a rotacao do tabuleiro durante o modo bebado
 		pair<int, int> tam;	//	Define o tamanho do tabuleiro
 		int vel, altura, alturaOld, pontos;	//	Define a velocidade, altura, altura anterior e pontos respectivamente
@@ -32,8 +31,7 @@ class Play {
 		Play(
 			const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
 			const string &cor, const unordered_map<string, bool> &option,
-			const GLfloat &view_w, const GLfloat &view_h,
-			const int &state, const bool &gameRunning);
+			const GLfloat &view_w, const GLfloat &view_h, const int &state);
 		~Play();
 		Play &operator=(const Play *o);
 		void spinDisplay(const int x);
@@ -41,6 +39,8 @@ class Play {
 		void exibeJogo();
 		void renderGameFrame();
 		void setUltimaTecla(const char ultimaTecla) { this->ultimaTecla = ultimaTecla; }
+		int getState() const { return this->state; }
+		void setState(const int state) { this->state = state; }
 		void configGame();
 		void configVars();
 		void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);

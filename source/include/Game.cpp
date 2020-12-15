@@ -2,8 +2,7 @@
 
 char Game::ultimaTecla = ' ';
 int Game::state = 0, Game::selec = 0;
-bool Game::gameRunning = false;
-GLfloat Game::view_w = WINDOW_WIDTH/2, view_h = WINDOW_HEIGHT/2;
+GLfloat Game::view_w = WINDOW_WIDTH/2, Game::view_h = WINDOW_HEIGHT/2;
 unordered_map<string, bool> Game::option = {
 	{"NORMAL1", 1}, {"RAPIDO", 0},
 	{"TURBO", 0}, {"20x10", 1},
@@ -52,7 +51,7 @@ unordered_map<string, unordered_map<string, vector<GLfloat>>> Game::colors = {
 };
 string Game::cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 Menu Game::menu = *(new Menu(colors, cor, option, selecN, view_w, view_h));
-Play Game::play = *(new Play(colors, cor, option, view_w, view_h, state, gameRunning));
+Play Game::play = *(new Play(colors, cor, option, view_w, view_h, state));
 
 void Game::game(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -76,7 +75,7 @@ void Game::updateVariables() {
 	);
 
 	menu = new Menu(colors, cor, option, selecN, view_w, view_h);
-	play = new Play(colors, cor, option, view_w, view_h, state, gameRunning);
+	play = new Play(colors, cor, option, view_w, view_h, state);
 }
 
 //	Funcao principal para renderizar os graficos do jogo
@@ -86,14 +85,15 @@ void Game::display() {
 	if(state == 0) {
 		menu.renderMenu();
 	} else if(state == 1) {
-		if(!gameRunning) {
-			srand(time(NULL));
-			play.configVars();
-			play.configGame();
-			gameRunning = 1;
-		}
-		play.renderGameFrame();
+		srand(time(NULL));
+		play.configVars();
+		play.configGame();
+		state = 2;
+		play.setState(state);
 	} else if(state == 2) {
+		play.renderGameFrame();
+		state = play.getState();
+	} else if(state == 3) {
 		usleep(3000000);
 		state = 0;
 	} else {
@@ -296,7 +296,7 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 				}
 				break;
 		}
-	} else if(state == 1) {
+	} else if(state == 2) {
 		switch(key) {
 			case GLUT_KEY_LEFT:
 				play.setUltimaTecla('l');
@@ -340,7 +340,7 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 				if(selecI[selec] == "INICIAR")
 					state = 1;
 				if(selecI[selec] == "SAIR")
-					state = 3;
+					state = 4;
 				break;
 			case 27:
 				selecN[selecI[selec]].second = 0;
@@ -348,11 +348,10 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 				selec = selecN["SAIR"].first;
 				break;
 		}
-	} else if(state == 1) {
+	} else if(state == 2) {
 		switch(key) {
 			case 27:
 				state = 0;
-				gameRunning = 0;
 			case 32:
 				play.setUltimaTecla('s');
 				break;
@@ -400,7 +399,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 							option["BEBADO"] = 0;
 							option[cursorSelec] = 1;
 						} else {
-							state = 3;
+							state = 4;
 						}
 					}
 				}

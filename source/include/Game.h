@@ -22,9 +22,8 @@ class Game {
 	private:
 		static Menu menu;  // Menu object
 		static Play play;  // Tetris game object
-		static int state;  //   0 - menu, 1 - jogo, 2 - derrota e qualquer outro encerramento do jogo
+		static int state;  //   0 - menu, 1 - configura jogo, 2 - jogo, 3 - derrota e qualquer outro encerramento do jogo
 		static int selec;  //   0 a 12 representam o botao esta selecionado
-		static bool gameRunning;  //  0 - nao, 1 - sim
 		static string cor;	//	String que define qual esquema de cores foi selecionado
 		static char ultimaTecla;	//	Auxiliares
 		static GLfloat view_w, view_h;  //  Os valores representam a metade do tamanho atual da janela

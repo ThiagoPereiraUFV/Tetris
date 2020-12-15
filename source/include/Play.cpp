@@ -3,11 +3,9 @@
 Play::Play(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
 		const string &cor, const unordered_map<string, bool> &option,
-		const GLfloat &view_w, const GLfloat &view_h,
-		const int &state, const bool &gameRunning) {
+		const GLfloat &view_w, const GLfloat &view_h, const int &state) {
 	this->spin = 0;
 	this->state = state;
-	this->gameRunning = gameRunning;
 	this->colors = colors;
 	this->cor = cor;
 	this->option = option;
@@ -25,7 +23,6 @@ Play::~Play() {
 Play &Play::operator=(const Play *o) {
 	this->spin = o->spin;
 	this->state = o->state;
-	this->gameRunning = o->gameRunning;
 	this->colors = o->colors;
 	this->p0 = o->p0;
 	this->p1 = o->p1;
@@ -80,12 +77,9 @@ void Play::renderGameFrame() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	if(jogoComPecaCaindo.getAltura() > alturaMaximaJogo) {
 		const string p = "PONTUACAO: " + to_string(pontos);
-		drawText(-(p0.first + p1.first) / 2 - view_h * 0.35, view_h * 0.3,
-		         view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
-		drawText(-(p0.first + p1.first) / 2 - view_h * 0.35, view_h * 0.1,
-		         view_h * 0.0008, view_h * 0.0008, p);
-		state = 2;
-		gameRunning = 0;
+		drawText(-(p0.first + p1.first) / 2 - view_h * 0.35, view_h * 0.3, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
+		drawText(-(p0.first + p1.first) / 2 - view_h * 0.35, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
+		state = 3;
 		return;
 	}
 	jogoComPecaCaindo = jogo;
