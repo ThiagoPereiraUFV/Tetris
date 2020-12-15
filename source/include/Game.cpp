@@ -323,7 +323,7 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 	glutPostRedisplay();
 }
 
-//	Handle enter, esc e spacebar events
+//	Handle enter, esc e spacebar keys events
 void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 	if(state == 0) {
 		switch(key) {

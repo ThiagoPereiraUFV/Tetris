@@ -24,8 +24,6 @@ Play &Play::operator=(const Play *o) {
 	this->spin = o->spin;
 	this->state = o->state;
 	this->colors = o->colors;
-	this->p0 = o->p0;
-	this->p1 = o->p1;
 	this->cor = o->cor;
 	this->option = o->option;
 	this->view_w = o->view_w;
@@ -77,8 +75,8 @@ void Play::renderGameFrame() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	if(jogoComPecaCaindo.getAltura() > alturaMaximaJogo) {
 		const string p = "PONTUACAO: " + to_string(pontos);
-		drawText(-(p0.first + p1.first) / 2 - view_h * 0.35, view_h * 0.3, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
-		drawText(-(p0.first + p1.first) / 2 - view_h * 0.35, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
+		drawText(-view_h * 0.35, view_h * 0.3, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
+		drawText(-view_h * 0.35, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
 		state = 3;
 		return;
 	}

@@ -24,8 +24,8 @@ class Game {
 		static string cor;	//	Define which color is being used in game
 		static char ultimaTecla;	//	Last key pressed
 		static GLfloat view_w, view_h;	//  Half of game window width and height size
-		static unordered_map<string, bool> option;	// Options selected to set up a new game
-		static unordered_map<string, pair<int, bool>> selecN;	// Map button to its id and if its selected
+		static unordered_map<string, bool> option;	//	Options selected to set up a new game
+		static unordered_map<string, pair<int, bool>> selecN;	//	Map button to its id and if its selected
 		static unordered_map<int, string> selecI;	//  Map button id to its name
 		static unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;   //	Color scheme
 	public:

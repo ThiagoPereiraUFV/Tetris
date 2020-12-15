@@ -54,7 +54,7 @@ Menu &Menu::operator=(const Menu *o) {
 	return *this;
 }
 
-//	Funcao utilizada para definir sobre qual botao o ponteiro do mouse se encontra
+//	Define mouse pointer selection
 string Menu::mousePointer(const GLint x, const GLint y) {
 	for(auto key : optNames) {
 		if(key == "TURBO" || key == "50x25" || key == "Cores3" ||
@@ -73,7 +73,7 @@ string Menu::mousePointer(const GLint x, const GLint y) {
 	return "";
 }
 
-//	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
+//	Draw text given text, scale and position
 void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text) {
 	glPointSize(1);
 	glLineWidth(2);
@@ -91,7 +91,7 @@ void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloa
 	glPopMatrix();
 }
 
-//	Funcao utilizada para desenhar um botao dada uma posicao e um texto
+//	Draw button given text and position
 void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 	glColor3f(colors[cor]["BoxBack"][0], colors[cor]["BoxBack"][1], colors[cor]["BoxBack"][2]);
 	glPushMatrix();
@@ -130,7 +130,7 @@ void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 	glPopMatrix();
 }
 
-//	Funcao utilizada para renderizar todos o menu
+//	Render menu elements
 void Menu::renderMenu() {
 	//	Iniciar
 	drawButton(boxPos[optNames[0]], optNames[0]);
