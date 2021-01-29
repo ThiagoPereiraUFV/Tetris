@@ -51,7 +51,7 @@ unordered_map<string, unordered_map<string, vector<GLfloat>>> Game::colors = {
 };
 string Game::cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 Menu Game::menu = *(new Menu(colors, cor, option, selecN, view_w, view_h));
-Play Game::play = *(new Play(colors, cor, option, view_w, view_h, state));
+Play Game::play;
 
 void Game::game(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -89,7 +89,7 @@ void Game::display() {
 			break;
 		case 1:
 			srand(time(NULL));
-			play = new Play(colors, cor, option, view_w, view_h, state);
+			play.setup(colors, cor, option, view_w, view_h, state);
 			play.configVars();
 			play.configGame();
 			state = 2;

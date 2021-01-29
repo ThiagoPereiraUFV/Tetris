@@ -1,37 +1,50 @@
 #include "Play.h"
 
-Play::Play(
+int Play::state;
+GLfloat Play::spin;
+pair<int, int> Play::tam;
+int Play::vel, Play::altura, Play::alturaOld, Play::pontos;
+Tetris Play::jogo, Play::jogoComPecaCaindo;
+const vector<GLint> Play::possiveisRotacoes = {0, 90, 180, 270};
+int Play::larguraJogo, Play::alturaMaximaJogo, Play::alturaPecaAtual, Play::posicaoPecaAtual, Play::rotacaoPecaAtual;
+char Play::idPecaAtual, Play::ultimaTecla;
+unordered_map<string, unordered_map<string, vector<GLfloat>>> Play::colors;
+string Play::cor;
+unordered_map<string, bool> Play::option;
+GLfloat Play::view_w, Play::view_h;
+
+void Play::setup(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
 		const string &cor, const unordered_map<string, bool> &option,
 		const GLfloat &view_w, const GLfloat &view_h, const int &state) {
-	this->spin = 0;
-	this->state = state;
-	this->colors = colors;
-	this->cor = cor;
-	this->option = option;
-	this->view_w = view_w;
-	this->view_h = view_h;
+	Play::spin = 0;
+	Play::state = state;
+	Play::colors = colors;
+	Play::cor = cor;
+	Play::option = option;
+	Play::view_w = view_w;
+	Play::view_h = view_h;
 }
 
-Play::~Play() {
-	this->jogo.~Tetris();
-	this->jogoComPecaCaindo.~Tetris();
-	this->colors.clear();
-	this->option.clear();
+void Play::playDesctuctor() {
+	Play::jogo.~Tetris();
+	Play::jogoComPecaCaindo.~Tetris();
+	Play::colors.clear();
+	Play::option.clear();
 }
 
 Play &Play::operator=(const Play *o) {
-	this->spin = o->spin;
-	this->state = o->state;
-	this->colors = o->colors;
-	this->cor = o->cor;
-	this->option = o->option;
-	this->view_w = o->view_w;
-	this->view_h = o->view_h;
+	Play::spin = o->spin;
+	Play::state = o->state;
+	Play::colors = o->colors;
+	Play::cor = o->cor;
+	Play::option = o->option;
+	Play::view_w = o->view_w;
+	Play::view_h = o->view_h;
 
 	return *this;
 }
-/*
+
 //	Funcao utilizada para rotacionar o tabuleiro no modo bebado
 void Play::spinDisplay(const int x) {
 	spin = spin + 5.0;
@@ -39,7 +52,7 @@ void Play::spinDisplay(const int x) {
 		spin = spin - 360.0;
 	glutTimerFunc(100, spinDisplay, x);
 	glutPostRedisplay();
-}*/
+}
 
 //	Funcao utilizada para desenhar um quadrado dada uma posicao e um caractere
 void Play::exibeObjeto(const GLint x, const GLint y, const char c) {
@@ -170,14 +183,14 @@ void Play::configVars() {
 	}
 	if(option["BEBADO"]) {
 		spin = 0.0;
-		//glutTimerFunc(100, spinDisplay, 0);
+		glutTimerFunc(100, spinDisplay, 0);
 	}
 }
 
 //	Set view variables to keep window ratio
 void Play::setView(const GLfloat &view_w, const GLfloat &view_h) {
-	this->view_w = view_w;
-	this->view_h = view_h;
+	Play::view_w = view_w;
+	Play::view_h = view_h;
 }
 
 //	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
