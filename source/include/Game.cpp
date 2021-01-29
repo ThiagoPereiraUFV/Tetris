@@ -89,6 +89,7 @@ void Game::display() {
 			break;
 		case 1:
 			srand(time(NULL));
+			play = new Play(colors, cor, option, view_w, view_h, state);
 			play.configVars();
 			play.configGame();
 			state = 2;

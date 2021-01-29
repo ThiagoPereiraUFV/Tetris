@@ -150,23 +150,23 @@ void Play::configVars() {
 		else if(option["RAPIDO"])
 			vel = 80000;
 		else
-			vel = 60000;
+			vel = 70000;
 	} else if(option["30x15"]) {
 		tam = make_pair(30, 15);
 		if(option["NORMAL1"])
 			vel = 80000;
 		else if(option["RAPIDO"])
-			vel = 40000;
+			vel = 60000;
 		else
-			vel = 30000;
+			vel = 40000;
 	} else {
 		tam = make_pair(50, 25);
 		if(option["NORMAL1"])
-			vel = 40000;
+			vel = 50000;
 		else if(option["RAPIDO"])
-			vel = 20000;
+			vel = 40000;
 		else
-			vel = 15000;
+			vel = 30000;
 	}
 	if(option["BEBADO"]) {
 		spin = 0.0;
