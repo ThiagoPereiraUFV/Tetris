@@ -26,13 +26,13 @@ class Play {
 		static unordered_map<string, bool> option;	//	Map usado para determinar a opcao selecionada que ira configurar o jogo
 		static GLfloat view_w, view_h;	//  Os valores representam a metade do tamanho atual da janela
 	public:
-		static void play();
+		Play &operator=(const Play *o);
 		static void setup(
 			const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
 			const string &cor, const unordered_map<string, bool> &option,
-			const GLfloat &view_w, const GLfloat &view_h, const int &state);
+			const GLfloat &view_w, const GLfloat &view_h, const int &state
+		);
 		static void playDesctuctor();
-		Play &operator=(const Play *o);
 		static void spinDisplay(const int x);
 		static void exibeObjeto(const GLint x, const GLint y, const char c);
 		static void exibeJogo();

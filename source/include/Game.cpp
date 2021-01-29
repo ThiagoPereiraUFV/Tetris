@@ -75,7 +75,7 @@ void Game::updateVariables() {
 	);
 
 	menu = new Menu(colors, cor, option, selecN, view_w, view_h);
-	play.setView(view_w, view_h);
+	Play::setView(view_w, view_h);
 }
 
 //	Render game elements
@@ -89,22 +89,22 @@ void Game::display() {
 			break;
 		case 1:
 			srand(time(NULL));
-			play.setup(colors, cor, option, view_w, view_h, state);
-			play.configVars();
-			play.configGame();
+			Play::setup(colors, cor, option, view_w, view_h, state);
+			Play::configVars();
+			Play::configGame();
 			state = 2;
-			play.setState(state);
+			Play::setState(state);
 			break;
 		case 2:
-			play.renderGameFrame();
-			state = play.getState();
+			Play::renderGameFrame();
+			state = Play::getState();
 			break;
 		case 3:
 			usleep(3000000);
 			state = 0;
 			break;
 		default:
-			play.~Play();
+			Play::playDesctuctor();
 			menu.~Menu();
 			exit(0);
 			break;
@@ -310,13 +310,13 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 	} else if(state == 2) {
 		switch(key) {
 			case GLUT_KEY_LEFT:
-				play.setUltimaTecla('l');
+				Play::setUltimaTecla('l');
 				break;
 			case GLUT_KEY_RIGHT:
-				play.setUltimaTecla('r');
+				Play::setUltimaTecla('r');
 				break;
 			case GLUT_KEY_DOWN:
-				play.setUltimaTecla('a');
+				Play::setUltimaTecla('a');
 				break;
 		}
 	}
@@ -358,7 +358,7 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 			case 27:
 				state = 0;
 			case 32:
-				play.setUltimaTecla('s');
+				Play::setUltimaTecla('s');
 				break;
 		}
 	}
