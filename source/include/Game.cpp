@@ -1,6 +1,5 @@
 #include "Game.h"
 
-char Game::lastKey;
 string Game::color;
 int Game::state = 0, Game::selec;
 GLfloat Game::view_w = WINDOW_WIDTH/2, Game::view_h = WINDOW_HEIGHT/2;
@@ -89,19 +88,20 @@ void Game::reshape(const GLsizei w, const GLsizei h) {
 	glutPostRedisplay();
 }
 
-//	Update important variables
+//	Set colors
 void Game::updateColors() {
+	glClear(GL_COLOR_BUFFER_BIT);
 	color = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 	glClearColor(
 		colors[color]["Background"][0],
 		colors[color]["Background"][1],
-		colors[color]["Background"][2], 1.0
+		colors[color]["Background"][2],
+		1.0
 	);
 }
 
 //	Render game elements
 void Game::display() {
-	glClear(GL_COLOR_BUFFER_BIT);
 	updateColors();
 
 	switch(state) {
@@ -318,17 +318,16 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 	} else if(state == 2) {
 		switch(key) {
 			case GLUT_KEY_LEFT:
-				Play::setUltimaTecla('l');
+				Play::setLastKey('l');
 				break;
 			case GLUT_KEY_RIGHT:
-				Play::setUltimaTecla('r');
+				Play::setLastKey('r');
 				break;
 			case GLUT_KEY_DOWN:
-				Play::setUltimaTecla('a');
+				Play::setLastKey('a');
 				break;
 		}
 	}
-	glutPostRedisplay();
 }
 
 //	Handle enter, esc e spacebar keys events
@@ -365,11 +364,10 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 			case 27:
 				state = 0;
 			case 32:
-				Play::setUltimaTecla('s');
+				Play::setLastKey('s');
 				break;
 		}
 	}
-	glutPostRedisplay();
 }
 
 //	Handle mouse click events
@@ -416,7 +414,6 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 				}
 		}
 	}
-	glutPostRedisplay();
 }
 
 //	Handle mouse selection events
@@ -429,5 +426,4 @@ void Game::MousePassiveMotion(const int x, const int y) {
 			selec = selecN[cursorSelec].first;
 		}
 	}
-	glutPostRedisplay();
 }

@@ -36,7 +36,7 @@ class Play {
 		static void renderGameFrame();
 		static int getState() { return Play::state; }
 		static void setState(const int &state) { Play::state = state; }
-		static void setUltimaTecla(const char lastKey) { Play::lastKey = lastKey; }
+		static void setLastKey(const char lastKey) { Play::lastKey = lastKey; }
 		static void setView(const GLfloat &view_w, const GLfloat &view_h);
 		static void configGame();
 		static void configVars();

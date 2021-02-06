@@ -13,7 +13,7 @@ class Menu {
 		static string color;	//	Selected color scheme
 		static GLfloat sxmenu, symenu;	//	X and Y text scale
 		static GLfloat view_w, view_h;	//	Half of game window width and height size
-		static pair<GLfloat, GLfloat> p0, p1;	//	Bottom left and top right menu rectangle points
+		static pair<GLfloat, GLfloat> p0, p1;	//	Top right menu and bottom left rectangle points
 		static unordered_map<string, pair<GLfloat, GLfloat>> boxPos;	//	Menu buttons position
 		static unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;   //	Color scheme
 		static unordered_map<string, bool> option;	//	Options selected to set up a new game

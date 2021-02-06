@@ -54,17 +54,18 @@ void Menu::setView(const GLfloat &view_w, const GLfloat &view_h) {
 //	Define mouse pointer selection
 string Menu::mousePointer(const GLint x, const GLint y) {
 	for(auto key : optNames) {
-		if(key == "TURBO" || key == "50x25" || key == "Cores3" ||
-		   key == "BEBADO") {
+		if(key == "TURBO" || key == "50x25" || key == "Cores3" || key == "BEBADO") {
 			if(x >= p0.first + boxPos[key].first &&
 			   x <= p1.first + boxPos[key].first &&
 			   y >= p0.second + boxPos[key].second &&
-			   y <= p1.second + boxPos[key].second)
+			   y <= p1.second + boxPos[key].second
+			)
 				return key;
 		} else if(x >= p0.first + boxPos[key].first &&
 				  x <= p1.first + boxPos[key].first &&
 				  y >= p0.second + boxPos[key].second &&
-				  y <= p1.second + boxPos[key].second)
+				  y <= p1.second + boxPos[key].second
+				)
 			return key;
 	}
 	return "";
