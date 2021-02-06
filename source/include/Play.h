@@ -20,17 +20,15 @@ class Play {
 		static Tetris jogo, jogoComPecaCaindo;	//	Define dois objetos do Tetris
 		static const vector<GLint> possiveisRotacoes;	//	Define as rotacoes disponiveis
 		static int larguraJogo, alturaMaximaJogo, alturaPecaAtual, posicaoPecaAtual, rotacaoPecaAtual;	//	Auxiliares
-		static char idPecaAtual, ultimaTecla;	//	Auxiliares
+		static char idPecaAtual, lastKey;	//	Auxiliares
 		static unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;	//	Map usado para representar o esquema de cores selecionado
-		static string cor;	//	String que define qual esquema de cores foi selecionado
+		static string color;	//	String que define qual esquema de cores foi selecionado
 		static unordered_map<string, bool> option;	//	Map usado para determinar a opcao selecionada que ira configurar o jogo
 		static GLfloat view_w, view_h;	//  Os valores representam a metade do tamanho atual da janela
 	public:
-		Play &operator=(const Play *o);
 		static void setup(
 			const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-			const string &cor, const unordered_map<string, bool> &option,
-			const GLfloat &view_w, const GLfloat &view_h, const int &state
+			const string &color, const unordered_map<string, bool> &option
 		);
 		static void playDesctuctor();
 		static void spinDisplay(const int x);
@@ -39,7 +37,7 @@ class Play {
 		static void renderGameFrame();
 		static int getState() { return Play::state; }
 		static void setState(const int &state) { Play::state = state; }
-		static void setUltimaTecla(const char ultimaTecla) { Play::ultimaTecla = ultimaTecla; }
+		static void setUltimaTecla(const char lastKey) { Play::lastKey = lastKey; }
 		static void setView(const GLfloat &view_w, const GLfloat &view_h);
 		static void configGame();
 		static void configVars();

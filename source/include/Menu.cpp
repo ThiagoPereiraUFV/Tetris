@@ -1,21 +1,40 @@
 #include "Menu.h"
 
-Menu::Menu(
+unordered_map<string, unordered_map<string, vector<GLfloat>>> Menu::colors;
+string Menu::color;
+unordered_map<string, bool> Menu::option;
+unordered_map<string, pair<int, bool>> Menu::selecN;
+GLfloat Menu::view_w, Menu::view_h;
+GLfloat Menu::sxmenu, Menu::symenu;
+pair<GLfloat, GLfloat> Menu::p0, Menu::p1;
+unordered_map<string, pair<GLfloat, GLfloat>> Menu::boxPos;
+vector<string> Menu::optNames{
+	"INICIAR", "NORMAL1", "RAPIDO",
+	"TURBO", "20x10", "30x15",
+	"50x25", "Cores1", "Cores2",
+	"Cores3", "NORMAL2", "BEBADO", "SAIR"
+};
+
+void Menu::setup(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-		const string &cor, const unordered_map<string, bool> &option,
-		const unordered_map<string, pair<int, bool>> &selecN,
-		const GLfloat &view_w, const GLfloat &view_h) {
-	this->colors = colors;
-	this->cor = cor;
-	this->option = option;
-	this->selecN = selecN;
-	this->view_w = view_w;
-	this->view_h = view_h;
-	this->sxmenu = view_h*0.0003;
-	this->symenu = view_h*0.0004;
-	this->p0 = make_pair(-view_h*0.1, -view_h*0.1);
-	this->p1 = make_pair(view_h*0.3, view_h*0.03);
-	this->boxPos = {
+		const string &color, const unordered_map<string, bool> &option,
+		const unordered_map<string, pair<int, bool>> &selecN
+	) {
+	Menu::colors = colors;
+	Menu::color = color;
+	Menu::option = option;
+	Menu::selecN = selecN;
+}
+
+//	Set view variables to keep window ratio
+void Menu::setView(const GLfloat &view_w, const GLfloat &view_h) {
+	Menu::view_w = view_w;
+	Menu::view_h = view_h;
+	Menu::sxmenu = view_h*0.0003;
+	Menu::symenu = view_h*0.0004;
+	Menu::p0 = make_pair(-view_h*0.1, -view_h*0.1);
+	Menu::p1 = make_pair(view_h*0.3, view_h*0.03);
+	Menu::boxPos = {
 		{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)},
 		{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)},
 		{"RAPIDO", make_pair(-(p0.first+p1.first)/2, view_h*0.5)},
@@ -30,28 +49,6 @@ Menu::Menu(
 		{"BEBADO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.25), -view_h*0.4)},
 		{"SAIR", make_pair(-(p0.first+p1.first)/2, -view_h*0.7)}
 	};
-}
-
-Menu::~Menu() {
-	this->colors.clear();
-	this->option.clear();
-	this->selecN.clear();
-}
-
-Menu &Menu::operator=(const Menu *o) {
-	this->colors = o->colors;
-	this->p0 = o->p0;
-	this->p1 = o->p1;
-	this->cor = o->cor;
-	this->option = o->option;
-	this->selecN = o->selecN;
-	this->view_w = o->view_w;
-	this->view_h = o->view_h;
-	this->boxPos = o->boxPos;
-	this->sxmenu = o->sxmenu;
-	this->symenu = o->symenu;
-
-	return *this;
 }
 
 //	Define mouse pointer selection
@@ -80,8 +77,8 @@ void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloa
 	string out = text;
 	if(out == "NORMAL1" || out == "NORMAL2")
 		out = "NORMAL";
-	glColor3f(colors[cor]["Text"][0], colors[cor]["Text"][1],
-			  colors[cor]["Text"][2]);
+	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1],
+			  colors[color]["Text"][2]);
 	glPushMatrix();
 	glTranslatef(x, y, 0);
 	glScalef(sx, sy, 1.0);
@@ -93,7 +90,7 @@ void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloa
 
 //	Draw button given text and position
 void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
-	glColor3f(colors[cor]["BoxBack"][0], colors[cor]["BoxBack"][1], colors[cor]["BoxBack"][2]);
+	glColor3f(colors[color]["BoxBack"][0], colors[color]["BoxBack"][1], colors[color]["BoxBack"][2]);
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glLineWidth(5);
@@ -102,23 +99,23 @@ void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 	glPopMatrix();
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glColor3f(colors[cor]["Box"][0], colors[cor]["Box"][1],
-			  colors[cor]["Box"][2]);
+	glColor3f(colors[color]["Box"][0], colors[color]["Box"][1],
+			  colors[color]["Box"][2]);
 	glPushMatrix();
 	glTranslatef(pos.first, pos.second, 0);
 	glRecti(p0.first, p0.second, p1.first, p1.second);
 	glPopMatrix();
 	if(option[text]) {
 		glPushMatrix();
-		glColor3f(colors[cor]["Background"][0], colors[cor]["Background"][1],
-				  colors[cor]["Background"][2]);
+		glColor3f(colors[color]["Background"][0], colors[color]["Background"][1],
+				  colors[color]["Background"][2]);
 		glTranslatef(pos.first, pos.second, 0);
 		glRecti(p0.first, p0.second, p1.first, p1.second);
 		glPopMatrix();
 	}
 	if(selecN[text].second) {
-		glColor3f(colors[cor]["Text"][0], colors[cor]["Text"][1],
-				  colors[cor]["Text"][2]);
+		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1],
+				  colors[color]["Text"][2]);
 		glPushMatrix();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glLineWidth(5);

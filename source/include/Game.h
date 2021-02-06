@@ -17,12 +17,10 @@
 
 class Game {
 	private:
-		static Menu menu;	//	Menu object
-		static Play play;	//	Tetris game object
 		static int state;	//	0 - menu, 1 - setting up game, 2 - game, 3 - game over and 4 - game exit
 		static int selec;	//	0 to 12 represents current selected button
-		static string cor;	//	Define which color is being used in game
-		static char ultimaTecla;	//	Last key pressed
+		static string color;	//	Define which color is being used in game
+		static char lastKey;	//	Last key pressed
 		static GLfloat view_w, view_h;	//  Half of game window width and height size
 		static unordered_map<string, bool> option;	//	Options selected to set up a new game
 		static unordered_map<string, pair<int, bool>> selecN;	//	Map button to its id and if its selected

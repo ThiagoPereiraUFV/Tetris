@@ -1,6 +1,6 @@
 #include "Game.h"
 
-char Game::ultimaTecla = ' ';
+char Game::lastKey = ' ';
 int Game::state = 0, Game::selec = 0;
 GLfloat Game::view_w = WINDOW_WIDTH/2, Game::view_h = WINDOW_HEIGHT/2;
 unordered_map<string, bool> Game::option = {
@@ -49,9 +49,7 @@ unordered_map<string, unordered_map<string, vector<GLfloat>>> Game::colors = {
 		{"Piece", {0.0, 0.0, 0.0}}}
 	}
 };
-string Game::cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
-Menu Game::menu = *(new Menu(colors, cor, option, selecN, view_w, view_h));
-Play Game::play;
+string Game::color = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 
 void Game::game(int argc, char** argv) {
 	glutInit(&argc, argv);
@@ -67,15 +65,14 @@ void Game::game(int argc, char** argv) {
 
 //	Update important variables
 void Game::updateVariables() {
-	cor = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
+	color = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 	glClearColor(
-		colors[cor]["Background"][0],
-		colors[cor]["Background"][1],
-		colors[cor]["Background"][2], 1.0
+		colors[color]["Background"][0],
+		colors[color]["Background"][1],
+		colors[color]["Background"][2], 1.0
 	);
-
-	menu = new Menu(colors, cor, option, selecN, view_w, view_h);
 	Play::setView(view_w, view_h);
+	Menu::setView(view_w, view_h);
 }
 
 //	Render game elements
@@ -85,11 +82,12 @@ void Game::display() {
 
 	switch(state) {
 		case 0:
-			menu.renderMenu();
+			Menu::setup(colors, color, option, selecN);
+			Menu::renderMenu();
 			break;
 		case 1:
 			srand(time(NULL));
-			Play::setup(colors, cor, option, view_w, view_h, state);
+			Play::setup(colors, color, option);
 			Play::configVars();
 			Play::configGame();
 			state = 2;
@@ -105,7 +103,6 @@ void Game::display() {
 			break;
 		default:
 			Play::playDesctuctor();
-			menu.~Menu();
 			exit(0);
 			break;
 	}
@@ -373,7 +370,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 			case GLUT_LEFT_BUTTON:
 				if(btnState == GLUT_DOWN) {
 					// cout << "(" << x - view_w << ", " <<  view_h - y << ")\n";
-					const string cursorSelec = menu.mousePointer(x - view_w, view_h - y);
+					const string cursorSelec = Menu::mousePointer(x - view_w, view_h - y);
 					if(cursorSelec.length()) {
 						if(cursorSelec == "INICIAR")
 							state = 1;
@@ -417,7 +414,7 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 //	Handle mouse selection events
 void Game::MousePassiveMotion(const int x, const int y) {
 	if(state == 0) {
-		const string cursorSelec = menu.mousePointer(x - view_w, view_h - y);
+		const string cursorSelec = Menu::mousePointer(x - view_w, view_h - y);
 		if(cursorSelec.length()) {
 			selecN[selecI[selec]].second = 0;
 			selecN[cursorSelec].second = 1;

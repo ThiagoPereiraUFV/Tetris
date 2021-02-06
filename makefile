@@ -21,5 +21,5 @@ Game.o:
 start:
 	./tetris.out
 
-clean:
+clear:
 	rm ./bin/*.o *.out

@@ -7,23 +7,20 @@ int Play::vel, Play::altura, Play::alturaOld, Play::pontos;
 Tetris Play::jogo, Play::jogoComPecaCaindo;
 const vector<GLint> Play::possiveisRotacoes = {0, 90, 180, 270};
 int Play::larguraJogo, Play::alturaMaximaJogo, Play::alturaPecaAtual, Play::posicaoPecaAtual, Play::rotacaoPecaAtual;
-char Play::idPecaAtual, Play::ultimaTecla;
+char Play::idPecaAtual, Play::lastKey;
 unordered_map<string, unordered_map<string, vector<GLfloat>>> Play::colors;
-string Play::cor;
+string Play::color;
 unordered_map<string, bool> Play::option;
 GLfloat Play::view_w, Play::view_h;
 
 void Play::setup(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-		const string &cor, const unordered_map<string, bool> &option,
-		const GLfloat &view_w, const GLfloat &view_h, const int &state) {
+		const string &color, const unordered_map<string, bool> &option
+	) {
 	Play::spin = 0;
-	Play::state = state;
 	Play::colors = colors;
-	Play::cor = cor;
+	Play::color = color;
 	Play::option = option;
-	Play::view_w = view_w;
-	Play::view_h = view_h;
 }
 
 void Play::playDesctuctor() {
@@ -33,21 +30,9 @@ void Play::playDesctuctor() {
 	Play::option.clear();
 }
 
-Play &Play::operator=(const Play *o) {
-	Play::spin = o->spin;
-	Play::state = o->state;
-	Play::colors = o->colors;
-	Play::cor = o->cor;
-	Play::option = o->option;
-	Play::view_w = o->view_w;
-	Play::view_h = o->view_h;
-
-	return *this;
-}
-
 //	Funcao utilizada para rotacionar o tabuleiro no modo bebado
 void Play::spinDisplay(const int x) {
-	spin = spin + 5.0;
+	spin = spin + 3.0;
 	if(spin > 360.0)
 		spin = spin - 360.0;
 	glutTimerFunc(100, spinDisplay, x);
@@ -57,12 +42,12 @@ void Play::spinDisplay(const int x) {
 //	Funcao utilizada para desenhar um quadrado dada uma posicao e um caractere
 void Play::exibeObjeto(const GLint x, const GLint y, const char c) {
 	if(c == ' ') {
-		glColor3f(1.0 - colors[cor]["Piece"][0], 1.0 - colors[cor]["Piece"][1],
-		          1.0 - colors[cor]["Piece"][2]);
+		glColor3f(1.0 - colors[color]["Piece"][0], 1.0 - colors[color]["Piece"][1],
+		          1.0 - colors[color]["Piece"][2]);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	} else {
-		glColor3f(colors[cor]["Piece"][0], colors[cor]["Piece"][1],
-		          colors[cor]["Piece"][2]);
+		glColor3f(colors[color]["Piece"][0], colors[color]["Piece"][1],
+		          colors[color]["Piece"][2]);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
@@ -95,19 +80,19 @@ void Play::renderGameFrame() {
 	}
 	jogoComPecaCaindo = jogo;
 
-	if(ultimaTecla == 'l') {
+	if(lastKey == 'l') {
 		Tetris jogoTeste = jogoComPecaCaindo;
 		if(jogoTeste.adicionaForma(posicaoPecaAtual - 1, alturaPecaAtual,
 		                           idPecaAtual,
 		                           possiveisRotacoes[rotacaoPecaAtual]))
 			posicaoPecaAtual--;
-	} else if(ultimaTecla == 'r') {
+	} else if(lastKey == 'r') {
 		Tetris jogoTeste = jogoComPecaCaindo;
 		if(jogoTeste.adicionaForma(posicaoPecaAtual + 1, alturaPecaAtual,
 		                           idPecaAtual,
 		                           possiveisRotacoes[rotacaoPecaAtual]))
 			posicaoPecaAtual++;
-	} else if(ultimaTecla == 's') {
+	} else if(lastKey == 's') {
 		Tetris jogoTeste = jogoComPecaCaindo;
 		if(jogoTeste.adicionaForma(
 		       posicaoPecaAtual, alturaPecaAtual, idPecaAtual,
@@ -132,11 +117,11 @@ void Play::renderGameFrame() {
 		jogo = jogoComPecaCaindo;
 	}
 	exibeJogo();
-	if(ultimaTecla == 'a')
+	if(lastKey == 'a')
 		usleep(vel - vel * 0.8);
 	else
 		usleep(vel);
-	ultimaTecla = ' ';
+	lastKey = ' ';
 }
 
 //	Funcao utilizada para configurar inicializar o tamanho do tabuleiro
@@ -200,8 +185,8 @@ void Play::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloa
 	string out = text;
 	if(out == "NORMAL1" || out == "NORMAL2")
 		out = "NORMAL";
-	glColor3f(colors[cor]["Text"][0], colors[cor]["Text"][1],
-			  colors[cor]["Text"][2]);
+	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1],
+			  colors[color]["Text"][2]);
 	glPushMatrix();
 	glTranslatef(x, y, 0);
 	glScalef(sx, sy, 1.0);
