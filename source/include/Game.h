@@ -30,7 +30,7 @@ class Game {
 		static void game(int argc, char** argv);
 		static void init();
 		static void display();
-		static void updateVariables();
+		static void updateColors();
 		static void reshape(const GLsizei w, const GLsizei h);
 		static void SpecialKeys(const int key, const int x, const int y);
 		static void HandleKeyboard(const unsigned char key, const int x, const int y);

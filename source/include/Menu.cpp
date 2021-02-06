@@ -1,13 +1,13 @@
 #include "Menu.h"
 
-unordered_map<string, unordered_map<string, vector<GLfloat>>> Menu::colors;
 string Menu::color;
-unordered_map<string, bool> Menu::option;
-unordered_map<string, pair<int, bool>> Menu::selecN;
 GLfloat Menu::view_w, Menu::view_h;
 GLfloat Menu::sxmenu, Menu::symenu;
+unordered_map<string, bool> Menu::option;
 pair<GLfloat, GLfloat> Menu::p0, Menu::p1;
+unordered_map<string, pair<int, bool>> Menu::selecN;
 unordered_map<string, pair<GLfloat, GLfloat>> Menu::boxPos;
+unordered_map<string, unordered_map<string, vector<GLfloat>>> Menu::colors;
 vector<string> Menu::optNames{
 	"INICIAR", "NORMAL1", "RAPIDO",
 	"TURBO", "20x10", "30x15",
@@ -30,11 +30,11 @@ void Menu::setup(
 void Menu::setView(const GLfloat &view_w, const GLfloat &view_h) {
 	Menu::view_w = view_w;
 	Menu::view_h = view_h;
-	Menu::sxmenu = view_h*0.0003;
-	Menu::symenu = view_h*0.0004;
-	Menu::p0 = make_pair(-view_h*0.1, -view_h*0.1);
-	Menu::p1 = make_pair(view_h*0.3, view_h*0.03);
-	Menu::boxPos = {
+	sxmenu = view_h*0.0003;
+	symenu = view_h*0.0004;
+	p0 = make_pair(-view_h*0.1, -view_h*0.1);
+	p1 = make_pair(view_h*0.3, view_h*0.03);
+	boxPos = {
 		{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)},
 		{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)},
 		{"RAPIDO", make_pair(-(p0.first+p1.first)/2, view_h*0.5)},

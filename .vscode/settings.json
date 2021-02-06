@@ -8,6 +8,13 @@
 		"istream": "cpp",
 		"functional": "cpp",
 		"tuple": "cpp",
-		"utility": "cpp"
+		"utility": "cpp",
+		"optional": "cpp",
+		"fstream": "cpp",
+		"ostream": "cpp",
+		"sstream": "cpp",
+		"type_traits": "cpp",
+		"vector": "cpp",
+		"unordered_map": "cpp"
 	}
 }

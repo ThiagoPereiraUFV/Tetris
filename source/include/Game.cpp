@@ -1,7 +1,8 @@
 #include "Game.h"
 
-char Game::lastKey = ' ';
-int Game::state = 0, Game::selec = 0;
+char Game::lastKey;
+string Game::color;
+int Game::state = 0, Game::selec;
 GLfloat Game::view_w = WINDOW_WIDTH/2, Game::view_h = WINDOW_HEIGHT/2;
 unordered_map<string, bool> Game::option = {
 	{"NORMAL1", 1}, {"RAPIDO", 0},
@@ -18,7 +19,7 @@ unordered_map<string, pair<int, bool>> Game::selecN = {
 	{"Cores2", make_pair(8, 0)}, {"Cores3", make_pair(9, 0)},
 	{"NORMAL2", make_pair(10, 0)}, {"BEBADO", make_pair(11, 0)}, {"SAIR", make_pair(12, 0)}
 };
-unordered_map<int, string> Game::selecI = {
+unordered_map<int, string> Game::selecI{
 	{0, "INICIAR"}, {1, "NORMAL1"},
 	{2, "RAPIDO"}, {3, "TURBO"},
 	{4, "20x10"}, {5, "30x15"},
@@ -26,31 +27,31 @@ unordered_map<int, string> Game::selecI = {
 	{8, "Cores2"}, {9, "Cores3"},
 	{10, "NORMAL2"}, {11, "BEBADO"}, {12, "SAIR"}
 };
-unordered_map<string, unordered_map<string, vector<GLfloat>>> Game::colors = {
+unordered_map<string, unordered_map<string, vector<GLfloat>>> Game::colors{
 	{"Cores1", {
 		{"Box", {0.0, 0.0, 0.0}},
 		{"BoxBack", {0.0, 0.0, 0.0}},
 		{"Text", {1.0, 0.0, 0.0}},
 		{"Background", {1.0, 1.0, 0.0}},
-		{"Piece", {0.0, 0.0, 0.0}}}
-	},
+		{"Piece", {0.0, 0.0, 0.0}}
+	}},
 	{"Cores2", {
 		{"Box", {0.015, 0.34, 0.87}},
 		{"BoxBack", {0.0, 0.0, 0.0}},
 		{"Text", {0.0, 1.0, 0.0}},
 		{"Background", {1.0, 1.0, 1.0}},
-		{"Piece", {0.015, 0.34, 0.87}}}
-	},
+		{"Piece", {0.015, 0.34, 0.87}}
+	}},
 	{"Cores3", {
 		{"Box", {0.0, 0.0, 0.0}},
 		{"BoxBack", {0.0, 0.0, 0.0}},
 		{"Text", {1.0, 1.0, 0.0}},
 		{"Background", {1.0, 0.0, 0.0}},
-		{"Piece", {0.0, 0.0, 0.0}}}
-	}
+		{"Piece", {0.0, 0.0, 0.0}}
+	}}
 };
-string Game::color = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 
+//	Set up OpenGl and start game
 void Game::game(int argc, char** argv) {
 	glutInit(&argc, argv);
 	init();
@@ -63,22 +64,45 @@ void Game::game(int argc, char** argv) {
 	glutMainLoop();
 }
 
+//	Set up OpenGl window
+void Game::init() {
+	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
+	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	glutInitWindowPosition(
+		(glutGet(GLUT_SCREEN_WIDTH) - WINDOW_WIDTH) / 2,
+		(glutGet(GLUT_SCREEN_HEIGHT) - WINDOW_HEIGHT) / 2
+	);
+	glutCreateWindow("Tetris v1.0 by Thiago Pereira");
+	glutFullScreen();
+}
+
+//	Resize game elements to keep ratio
+void Game::reshape(const GLsizei w, const GLsizei h) {
+	view_w = w / 2;
+	view_h = h / 2;
+	Play::setView(view_w, view_h);
+	Menu::setView(view_w, view_h);
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-w / 2, w / 2, -h / 2, h / 2);
+	glutPostRedisplay();
+}
+
 //	Update important variables
-void Game::updateVariables() {
+void Game::updateColors() {
 	color = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
 	glClearColor(
 		colors[color]["Background"][0],
 		colors[color]["Background"][1],
 		colors[color]["Background"][2], 1.0
 	);
-	Play::setView(view_w, view_h);
-	Menu::setView(view_w, view_h);
 }
 
 //	Render game elements
 void Game::display() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	updateVariables();
+	updateColors();
 
 	switch(state) {
 		case 0:
@@ -102,7 +126,6 @@ void Game::display() {
 			state = 0;
 			break;
 		default:
-			Play::playDesctuctor();
 			exit(0);
 			break;
 	}
@@ -118,18 +141,6 @@ void Game::display() {
 	*/
 
 	glutSwapBuffers();
-	glutPostRedisplay();
-}
-
-//	Resize game elements to keep ratio
-void Game::reshape(const GLsizei w, const GLsizei h) {
-	view_w = w / 2;
-	view_h = h / 2;
-	updateVariables();
-	glViewport(0, 0, w, h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(-w / 2, w / 2, -h / 2, h / 2);
 	glutPostRedisplay();
 }
 
@@ -317,7 +328,6 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 				break;
 		}
 	}
-	updateVariables();
 	glutPostRedisplay();
 }
 
@@ -359,7 +369,6 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 				break;
 		}
 	}
-	updateVariables();
 	glutPostRedisplay();
 }
 
@@ -407,7 +416,6 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 				}
 		}
 	}
-	updateVariables();
 	glutPostRedisplay();
 }
 
@@ -422,16 +430,4 @@ void Game::MousePassiveMotion(const int x, const int y) {
 		}
 	}
 	glutPostRedisplay();
-}
-
-//	Set up OpenGl and start
-void Game::init() {
-	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-	glutInitWindowPosition(
-		(glutGet(GLUT_SCREEN_WIDTH) - WINDOW_WIDTH) / 2,
-		(glutGet(GLUT_SCREEN_HEIGHT) - WINDOW_HEIGHT) / 2
-	);
-	glutCreateWindow("Tetris v1.0 by Thiago Pereira");
-	glutFullScreen();
 }

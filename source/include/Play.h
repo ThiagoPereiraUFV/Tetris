@@ -30,7 +30,6 @@ class Play {
 			const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
 			const string &color, const unordered_map<string, bool> &option
 		);
-		static void playDesctuctor();
 		static void spinDisplay(const int x);
 		static void exibeObjeto(const GLint x, const GLint y, const char c);
 		static void exibeJogo();

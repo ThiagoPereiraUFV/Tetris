@@ -2,32 +2,26 @@
 
 int Play::state;
 GLfloat Play::spin;
-pair<int, int> Play::tam;
-int Play::vel, Play::altura, Play::alturaOld, Play::pontos;
-Tetris Play::jogo, Play::jogoComPecaCaindo;
-const vector<GLint> Play::possiveisRotacoes = {0, 90, 180, 270};
-int Play::larguraJogo, Play::alturaMaximaJogo, Play::alturaPecaAtual, Play::posicaoPecaAtual, Play::rotacaoPecaAtual;
-char Play::idPecaAtual, Play::lastKey;
-unordered_map<string, unordered_map<string, vector<GLfloat>>> Play::colors;
 string Play::color;
-unordered_map<string, bool> Play::option;
+pair<int, int> Play::tam;
 GLfloat Play::view_w, Play::view_h;
+char Play::idPecaAtual, Play::lastKey;
+Tetris Play::jogo, Play::jogoComPecaCaindo;
+int Play::posicaoPecaAtual, Play::rotacaoPecaAtual;
+int Play::vel, Play::altura, Play::alturaOld, Play::pontos;
+int Play::larguraJogo, Play::alturaMaximaJogo, Play::alturaPecaAtual;
+unordered_map<string, bool> Play::option;
+const vector<GLint> Play::possiveisRotacoes{0, 90, 180, 270};
+unordered_map<string, unordered_map<string, vector<GLfloat>>> Play::colors;
 
 void Play::setup(
 		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
 		const string &color, const unordered_map<string, bool> &option
 	) {
-	Play::spin = 0;
+	spin = 0;
 	Play::colors = colors;
 	Play::color = color;
 	Play::option = option;
-}
-
-void Play::playDesctuctor() {
-	Play::jogo.~Tetris();
-	Play::jogoComPecaCaindo.~Tetris();
-	Play::colors.clear();
-	Play::option.clear();
 }
 
 //	Funcao utilizada para rotacionar o tabuleiro no modo bebado
