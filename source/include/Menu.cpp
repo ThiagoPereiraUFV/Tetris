@@ -67,15 +67,17 @@ string Menu::mousePointer(const GLint x, const GLint y) {
 
 //	Draw text given text, scale and position
 void Menu::drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text) {
-	glLineWidth(2);
 	string out = text;
 	if(out == "NORMAL1" || out == "NORMAL2")
 		out = "NORMAL";
 	const unsigned char* str = (unsigned char*)out.c_str();
+
 	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, str)*sx;
 	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*sy;
-	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
+
 	glPushMatrix();
+	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
+	glLineWidth(2);
 	glTranslatef(x - length/2.0, y - height/2.0, 0);
 	glScalef(sx, sy, 1.0);
 	glutStrokeString(GLUT_STROKE_MONO_ROMAN, str);
@@ -84,20 +86,21 @@ void Menu::drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GL
 
 //	Draw button given text and position
 void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
-	glColor3f(colors[color]["BoxBack"][0], colors[color]["BoxBack"][1], colors[color]["BoxBack"][2]);
 	glPushMatrix();
+	glColor3f(colors[color]["BoxBack"][0], colors[color]["BoxBack"][1], colors[color]["BoxBack"][2]);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glLineWidth(5);
 	glTranslatef(pos.first, pos.second, 0);
 	glRecti(p0.first, p0.second, p1.first, p1.second);
 	glPopMatrix();
+
 	glPushMatrix();
-	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glColor3f(colors[color]["Box"][0], colors[color]["Box"][1], colors[color]["Box"][2]);
-	glPushMatrix();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glTranslatef(pos.first, pos.second, 0);
 	glRecti(p0.first, p0.second, p1.first, p1.second);
 	glPopMatrix();
+
 	if(option[text]) {
 		glPushMatrix();
 		glColor3f(colors[color]["Background"][0], colors[color]["Background"][1], colors[color]["Background"][2]);
@@ -105,17 +108,18 @@ void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 		glRecti(p0.first, p0.second, p1.first, p1.second);
 		glPopMatrix();
 	}
+
 	if(selecN[text].second) {
-		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 		glPushMatrix();
+		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glLineWidth(5);
 		glTranslatef(pos.first, pos.second, 0);
 		glRecti(p0.first, p0.second, p1.first, p1.second);
 		glPopMatrix();
 	}
+
 	drawText(pos.first+p1.first/2.0, pos.second+p1.second/2.0, sxmenu, symenu, text);
-	glPopMatrix();
 }
 
 //	Render menu elements
