@@ -2,7 +2,9 @@
 #define MENU_H
 
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <string>
+#include <cstring>
 #include <vector>
 #include <unordered_map>
 
@@ -27,7 +29,7 @@ class Menu {
 		);
 		static void setView(const GLfloat &view_w, const GLfloat &view_h);
 		static string mousePointer(const GLint x, const GLint y);
-		static void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);
+		static void drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text);
 		static void drawButton(const pair<GLfloat, GLfloat> &pos, const string text);
 		static void renderMenu();
 };

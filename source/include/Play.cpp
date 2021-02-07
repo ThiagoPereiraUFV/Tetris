@@ -67,8 +67,8 @@ void Play::renderGameFrame() {
 	glClear(GL_COLOR_BUFFER_BIT);
 	if(jogoComPecaCaindo.getAltura() > alturaMaximaJogo) {
 		const string p = "PONTUACAO: " + to_string(pontos);
-		drawText(-view_h * 0.35, view_h * 0.3, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
-		drawText(-view_h * 0.35, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
+		drawText(0, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
+		drawText(0, -view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
 		state = 3;
 		return;
 	}
@@ -172,20 +172,20 @@ void Play::setView(const GLfloat &view_w, const GLfloat &view_h) {
 	Play::view_h = view_h;
 }
 
-//	Funcao utilizada para desenhar um texto dada uma posicao e uma escala
-void Play::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text) {
+//	Draw text given text, scale and position
+void Play::drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text) {
 	glPointSize(1);
 	glLineWidth(2);
 	string out = text;
 	if(out == "NORMAL1" || out == "NORMAL2")
 		out = "NORMAL";
-	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1],
-			  colors[color]["Text"][2]);
+	const unsigned char* str = (unsigned char*)out.c_str();
+	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, str)*sx;
+	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*sy;
+	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 	glPushMatrix();
-	glTranslatef(x, y, 0);
+	glTranslatef(x - length/2.0, y - height/2.0, 0);
 	glScalef(sx, sy, 1.0);
-	for(int i = 0; i < out.length(); ++i) {
-		glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, out[i]);
-	}
+	glutStrokeString(GLUT_STROKE_MONO_ROMAN, str);
 	glPopMatrix();
 }

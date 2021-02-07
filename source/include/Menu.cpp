@@ -11,8 +11,8 @@ unordered_map<string, unordered_map<string, vector<GLfloat>>> Menu::colors;
 vector<string> Menu::optNames{
 	"INICIAR", "NORMAL1", "RAPIDO",
 	"TURBO", "20x10", "30x15",
-	"50x25", "Cores1", "Cores2",
-	"Cores3", "NORMAL2", "BEBADO", "SAIR"
+	"50x25", "CORES1", "CORES2",
+	"CORES3", "NORMAL2", "BEBADO", "SAIR"
 };
 
 void Menu::setup(
@@ -30,62 +30,55 @@ void Menu::setup(
 void Menu::setView(const GLfloat &view_w, const GLfloat &view_h) {
 	Menu::view_w = view_w;
 	Menu::view_h = view_h;
-	sxmenu = view_h*0.0003;
-	symenu = view_h*0.0004;
-	p0 = make_pair(-view_h*0.1, -view_h*0.1);
-	p1 = make_pair(view_h*0.3, view_h*0.03);
+	sxmenu = view_h*0.0005;
+	symenu = view_h*0.0006;
+	p0 = make_pair(0, 0);
+	p1 = make_pair(-view_h*0.4, -view_h*0.14);
 	boxPos = {
-		{"INICIAR", make_pair(-(p0.first+p1.first)/2, view_h*0.8)},
-		{"NORMAL1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.5)},
-		{"RAPIDO", make_pair(-(p0.first+p1.first)/2, view_h*0.5)},
-		{"TURBO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), view_h*0.5)},
-		{"20x10", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, view_h*0.2)},
-		{"30x15", make_pair(-(p0.first+p1.first)/2, view_h*0.2)},
-		{"50x25", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), view_h*0.2)},
-		{"Cores1", make_pair(-(p0.first+p1.first)/2 - view_h*0.45, -view_h*0.1)},
-		{"Cores2", make_pair(-(p0.first+p1.first)/2, -view_h*0.1)},
-		{"Cores3", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.45), -view_h*0.1)},
-		{"NORMAL2", make_pair(-(p0.first+p1.first)/2 - view_h*0.25, -view_h*0.4)},
-		{"BEBADO", make_pair(-1*((p0.first+p1.first)/2 - view_h*0.25), -view_h*0.4)},
-		{"SAIR", make_pair(-(p0.first+p1.first)/2, -view_h*0.7)}
+		{"INICIAR", make_pair(-p1.first/2, view_h*0.8)},
+		{"NORMAL1", make_pair(-p1.first/2 - view_h*0.45, view_h*0.5)},
+		{"RAPIDO", make_pair(-p1.first/2, view_h*0.5)},
+		{"TURBO", make_pair(-1*(p1.first/2 - view_h*0.45), view_h*0.5)},
+		{"20x10", make_pair(-p1.first/2 - view_h*0.45, view_h*0.2)},
+		{"30x15", make_pair(-p1.first/2, view_h*0.2)},
+		{"50x25", make_pair(-1*(p1.first/2 - view_h*0.45), view_h*0.2)},
+		{"CORES1", make_pair(-p1.first/2 - view_h*0.45, -view_h*0.1)},
+		{"CORES2", make_pair(-p1.first/2, -view_h*0.1)},
+		{"CORES3", make_pair(-1*(p1.first/2 - view_h*0.45), -view_h*0.1)},
+		{"NORMAL2", make_pair(-p1.first/2 - view_h*0.25, -view_h*0.4)},
+		{"BEBADO", make_pair(-1*(p1.first/2 - view_h*0.25), -view_h*0.4)},
+		{"SAIR", make_pair(-p1.first/2, -view_h*0.7)}
 	};
 }
 
 //	Define mouse pointer selection
 string Menu::mousePointer(const GLint x, const GLint y) {
 	for(auto key : optNames) {
-		if(key == "TURBO" || key == "50x25" || key == "Cores3" || key == "BEBADO") {
-			if(x >= p0.first + boxPos[key].first &&
-			   x <= p1.first + boxPos[key].first &&
-			   y >= p0.second + boxPos[key].second &&
-			   y <= p1.second + boxPos[key].second
-			)
-				return key;
-		} else if(x >= p0.first + boxPos[key].first &&
-				  x <= p1.first + boxPos[key].first &&
-				  y >= p0.second + boxPos[key].second &&
-				  y <= p1.second + boxPos[key].second
-				)
-			return key;
+		if(
+			x <= p0.first + boxPos[key].first &&
+			x >= p1.first + boxPos[key].first &&
+			y <= p0.second + boxPos[key].second &&
+			y >= p1.second + boxPos[key].second
+		)
+	return key;
 	}
 	return "";
 }
 
 //	Draw text given text, scale and position
-void Menu::drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text) {
-	glPointSize(1);
+void Menu::drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text) {
 	glLineWidth(2);
 	string out = text;
 	if(out == "NORMAL1" || out == "NORMAL2")
 		out = "NORMAL";
-	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1],
-			  colors[color]["Text"][2]);
+	const unsigned char* str = (unsigned char*)out.c_str();
+	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, str)*sx;
+	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*sy;
+	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 	glPushMatrix();
-	glTranslatef(x, y, 0);
+	glTranslatef(x - length/2.0, y - height/2.0, 0);
 	glScalef(sx, sy, 1.0);
-	for(int i = 0; i < out.length(); ++i) {
-		glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, out[i]);
-	}
+	glutStrokeString(GLUT_STROKE_MONO_ROMAN, str);
 	glPopMatrix();
 }
 
@@ -100,23 +93,20 @@ void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 	glPopMatrix();
 	glPushMatrix();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glColor3f(colors[color]["Box"][0], colors[color]["Box"][1],
-			  colors[color]["Box"][2]);
+	glColor3f(colors[color]["Box"][0], colors[color]["Box"][1], colors[color]["Box"][2]);
 	glPushMatrix();
 	glTranslatef(pos.first, pos.second, 0);
 	glRecti(p0.first, p0.second, p1.first, p1.second);
 	glPopMatrix();
 	if(option[text]) {
 		glPushMatrix();
-		glColor3f(colors[color]["Background"][0], colors[color]["Background"][1],
-				  colors[color]["Background"][2]);
+		glColor3f(colors[color]["Background"][0], colors[color]["Background"][1], colors[color]["Background"][2]);
 		glTranslatef(pos.first, pos.second, 0);
 		glRecti(p0.first, p0.second, p1.first, p1.second);
 		glPopMatrix();
 	}
 	if(selecN[text].second) {
-		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1],
-				  colors[color]["Text"][2]);
+		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 		glPushMatrix();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glLineWidth(5);
@@ -124,7 +114,7 @@ void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 		glRecti(p0.first, p0.second, p1.first, p1.second);
 		glPopMatrix();
 	}
-	drawText(pos.first, pos.second - view_h * 0.05, sxmenu, symenu, text);
+	drawText(pos.first+p1.first/2.0, pos.second+p1.second/2.0, sxmenu, symenu, text);
 	glPopMatrix();
 }
 
@@ -134,25 +124,25 @@ void Menu::renderMenu() {
 	drawButton(boxPos[optNames[0]], optNames[0]);
 
 	//	Velocidade
-	drawText(-(p0.first + p1.first) / 2 - view_h * 0.05, view_h * 0.6, sxmenu, symenu, "VELOCIDADE");
+	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[0]].second+p1.second + boxPos[optNames[2]].second)/2.0, sxmenu, symenu, "VELOCIDADE");
 	drawButton(boxPos[optNames[1]], optNames[1]);
 	drawButton(boxPos[optNames[2]], optNames[2]);
 	drawButton(boxPos[optNames[3]], optNames[3]);
 
 	//	Tamanho
-	drawText(-(p0.first + p1.first) / 2, view_h * 0.3, sxmenu, symenu, "TAMANHO");
+	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[2]].second+p1.second + boxPos[optNames[5]].second)/2.0, sxmenu, symenu, "TAMANHO");
 	drawButton(boxPos[optNames[4]], optNames[4]);
 	drawButton(boxPos[optNames[5]], optNames[5]);
 	drawButton(boxPos[optNames[6]], optNames[6]);
 
 	//	Cores
-	drawText(-(p0.first + p1.first) / 2 + view_h * 0.02, view_h * 0.005, sxmenu, symenu, "CORES");
+	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[5]].second+p1.second + boxPos[optNames[8]].second)/2.0, sxmenu, symenu, "CORES");
 	drawButton(boxPos[optNames[7]], optNames[7]);
 	drawButton(boxPos[optNames[8]], optNames[8]);
 	drawButton(boxPos[optNames[9]], optNames[9]);
 
 	//	Modo
-	drawText(-(p0.first + p1.first) / 2 + view_h * 0.03, -view_h * 0.3, sxmenu, symenu, "MODO");
+	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[8]].second+p1.second + boxPos[optNames[10]].second)/2.0, sxmenu, symenu, "MODO");
 	drawButton(boxPos[optNames[10]], optNames[10]);
 	drawButton(boxPos[optNames[11]], optNames[11]);
 

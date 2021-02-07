@@ -2,6 +2,7 @@
 #define PLAY_H
 
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 #include <unistd.h>
 #include <string>
 #include <vector>
@@ -40,7 +41,7 @@ class Play {
 		static void setView(const GLfloat &view_w, const GLfloat &view_h);
 		static void configGame();
 		static void configVars();
-		static void drawText(const GLint x, const GLint y, const GLfloat sx, const GLfloat sy, const string text);
+		static void drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text);
 };
 
 #endif

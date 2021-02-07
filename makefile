@@ -19,7 +19,7 @@ Game.o:
 	g++ $(includePath)/Game.cpp $(extraFlags) -o ./bin/Game.o
 
 start:
-	./tetris.out && clear
+	./tetris.out
 
 clear:
 	rm ./bin/*.o *.out

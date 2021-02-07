@@ -7,41 +7,41 @@ unordered_map<string, bool> Game::option = {
 	{"NORMAL1", 1}, {"RAPIDO", 0},
 	{"TURBO", 0}, {"20x10", 1},
 	{"30x15", 0}, {"50x25", 0},
-	{"Cores1", 1}, {"Cores2", 0},
-	{"Cores3", 0}, {"NORMAL2", 1}, {"BEBADO", 0}
+	{"CORES1", 1}, {"CORES2", 0},
+	{"CORES3", 0}, {"NORMAL2", 1}, {"BEBADO", 0}
 };
 unordered_map<string, pair<int, bool>> Game::selecN = {
 	{"INICIAR", make_pair(0, 1)}, {"NORMAL1", make_pair(1, 0)},
 	{"RAPIDO", make_pair(2, 0)}, {"TURBO", make_pair(3, 0)},
 	{"20x10", make_pair(4, 0)}, {"30x15", make_pair(5, 0)},
-	{"50x25", make_pair(6, 0)}, {"Cores1", make_pair(7, 0)},
-	{"Cores2", make_pair(8, 0)}, {"Cores3", make_pair(9, 0)},
+	{"50x25", make_pair(6, 0)}, {"CORES1", make_pair(7, 0)},
+	{"CORES2", make_pair(8, 0)}, {"CORES3", make_pair(9, 0)},
 	{"NORMAL2", make_pair(10, 0)}, {"BEBADO", make_pair(11, 0)}, {"SAIR", make_pair(12, 0)}
 };
 unordered_map<int, string> Game::selecI{
 	{0, "INICIAR"}, {1, "NORMAL1"},
 	{2, "RAPIDO"}, {3, "TURBO"},
 	{4, "20x10"}, {5, "30x15"},
-	{6, "50x25"}, {7, "Cores1"},
-	{8, "Cores2"}, {9, "Cores3"},
+	{6, "50x25"}, {7, "CORES1"},
+	{8, "CORES2"}, {9, "CORES3"},
 	{10, "NORMAL2"}, {11, "BEBADO"}, {12, "SAIR"}
 };
 unordered_map<string, unordered_map<string, vector<GLfloat>>> Game::colors{
-	{"Cores1", {
+	{"CORES1", {
 		{"Box", {0.0, 0.0, 0.0}},
 		{"BoxBack", {0.0, 0.0, 0.0}},
 		{"Text", {1.0, 0.0, 0.0}},
 		{"Background", {1.0, 1.0, 0.0}},
 		{"Piece", {0.0, 0.0, 0.0}}
 	}},
-	{"Cores2", {
+	{"CORES2", {
 		{"Box", {0.015, 0.34, 0.87}},
 		{"BoxBack", {0.0, 0.0, 0.0}},
 		{"Text", {0.0, 1.0, 0.0}},
 		{"Background", {1.0, 1.0, 1.0}},
 		{"Piece", {0.015, 0.34, 0.87}}
 	}},
-	{"Cores3", {
+	{"CORES3", {
 		{"Box", {0.0, 0.0, 0.0}},
 		{"BoxBack", {0.0, 0.0, 0.0}},
 		{"Text", {1.0, 1.0, 0.0}},
@@ -91,7 +91,7 @@ void Game::reshape(const GLsizei w, const GLsizei h) {
 //	Set colors
 void Game::updateColors() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	color = (option["Cores1"]) ? "Cores1" : (option["Cores2"]) ? "Cores2" : "Cores3";
+	color = (option["CORES1"]) ? "CORES1" : (option["CORES2"]) ? "CORES2" : "CORES3";
 	glClearColor(
 		colors[color]["Background"][0],
 		colors[color]["Background"][1],
@@ -158,15 +158,15 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 					selecN["NORMAL2"].second = 1;
 					selecN["SAIR"].second = 0;
 				} else if(selecN["NORMAL2"].second || selecN["BEBADO"].second) {
-					selec = selecN["Cores1"].first;
-					selecN["Cores1"].second = 1;
+					selec = selecN["CORES1"].first;
+					selecN["CORES1"].second = 1;
 					selecN["NORMAL2"].second = selecN["BEBADO"].second = 0;
-				} else if(selecN["Cores1"].second || selecN["Cores2"].second ||
-						  selecN["Cores3"].second) {
+				} else if(selecN["CORES1"].second || selecN["CORES2"].second ||
+						  selecN["CORES3"].second) {
 					selec = selecN["20x10"].first;
 					selecN["20x10"].second = 1;
-					selecN["Cores1"].second = selecN["Cores2"].second =
-						selecN["Cores3"].second = 0;
+					selecN["CORES1"].second = selecN["CORES2"].second =
+						selecN["CORES3"].second = 0;
 				} else if(selecN["20x10"].second || selecN["30x15"].second ||
 						  selecN["50x25"].second) {
 					selec = selecN["NORMAL1"].first;
@@ -194,16 +194,16 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 						selecN["TURBO"].second = 0;
 				} else if(selecN["20x10"].second || selecN["30x15"].second ||
 						  selecN["50x25"].second) {
-					selec = selecN["Cores1"].first;
-					selecN["Cores1"].second = 1;
+					selec = selecN["CORES1"].first;
+					selecN["CORES1"].second = 1;
 					selecN["20x10"].second = selecN["30x15"].second =
 						selecN["50x25"].second = 0;
-				} else if(selecN["Cores1"].second || selecN["Cores2"].second ||
-						  selecN["Cores3"].second) {
+				} else if(selecN["CORES1"].second || selecN["CORES2"].second ||
+						  selecN["CORES3"].second) {
 					selec = selecN["NORMAL2"].first;
 					selecN["NORMAL2"].second = 1;
-					selecN["Cores1"].second = selecN["Cores2"].second =
-						selecN["Cores3"].second = 0;
+					selecN["CORES1"].second = selecN["CORES2"].second =
+						selecN["CORES3"].second = 0;
 				} else if(selecN["NORMAL2"].second || selecN["BEBADO"].second) {
 					selec = selecN["SAIR"].first;
 					selecN["SAIR"].second = 1;
@@ -241,18 +241,18 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 					selecN["20x10"].second = 1;
 					selecN["50x25"].second = 0;
 				}
-				if(selecN["Cores1"].second) {
-					selec = selecN["Cores2"].first;
-					selecN["Cores2"].second = 1;
-					selecN["Cores1"].second = 0;
-				} else if(selecN["Cores2"].second) {
-					selec = selecN["Cores3"].first;
-					selecN["Cores3"].second = 1;
-					selecN["Cores2"].second = 0;
-				} else if(selecN["Cores3"].second) {
-					selec = selecN["Cores1"].first;
-					selecN["Cores1"].second = 1;
-					selecN["Cores3"].second = 0;
+				if(selecN["CORES1"].second) {
+					selec = selecN["CORES2"].first;
+					selecN["CORES2"].second = 1;
+					selecN["CORES1"].second = 0;
+				} else if(selecN["CORES2"].second) {
+					selec = selecN["CORES3"].first;
+					selecN["CORES3"].second = 1;
+					selecN["CORES2"].second = 0;
+				} else if(selecN["CORES3"].second) {
+					selec = selecN["CORES1"].first;
+					selecN["CORES1"].second = 1;
+					selecN["CORES3"].second = 0;
 				}
 				if(selecN["NORMAL2"].second) {
 					selec = selecN["BEBADO"].first;
@@ -291,18 +291,18 @@ void Game::SpecialKeys(const int key, const int x, const int y) {
 					selecN["20x10"].second = 1;
 					selecN["30x15"].second = 0;
 				}
-				if(selecN["Cores1"].second) {
-					selec = selecN["Cores3"].first;
-					selecN["Cores3"].second = 1;
-					selecN["Cores1"].second = 0;
-				} else if(selecN["Cores3"].second) {
-					selec = selecN["Cores2"].first;
-					selecN["Cores2"].second = 1;
-					selecN["Cores3"].second = 0;
-				} else if(selecN["Cores2"].second) {
-					selec = selecN["Cores1"].first;
-					selecN["Cores1"].second = 1;
-					selecN["Cores2"].second = 0;
+				if(selecN["CORES1"].second) {
+					selec = selecN["CORES3"].first;
+					selecN["CORES3"].second = 1;
+					selecN["CORES1"].second = 0;
+				} else if(selecN["CORES3"].second) {
+					selec = selecN["CORES2"].first;
+					selecN["CORES2"].second = 1;
+					selecN["CORES3"].second = 0;
+				} else if(selecN["CORES2"].second) {
+					selec = selecN["CORES1"].first;
+					selecN["CORES1"].second = 1;
+					selecN["CORES2"].second = 0;
 				}
 				if(selecN["NORMAL2"].second) {
 					selec = selecN["BEBADO"].first;
@@ -341,8 +341,8 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 				} else if(selecI[selec] == "20x10" || selecI[selec] == "30x15" || selecI[selec] == "50x25") {
 					option["20x10"] = option["30x15"] = option["50x25"] = 0;
 					option[selecI[selec]] = 1;
-				} else if(selecI[selec] == "Cores1" || selecI[selec] == "Cores2" || selecI[selec] == "Cores3") {
-					option["Cores1"] = option["Cores2"] = option["Cores3"] = 0;
+				} else if(selecI[selec] == "CORES1" || selecI[selec] == "CORES2" || selecI[selec] == "CORES3") {
+					option["CORES1"] = option["CORES2"] = option["CORES3"] = 0;
 					option[selecI[selec]] = 1;
 				} else if(selecI[selec] == "NORMAL2" || selecI[selec] == "BEBADO") {
 					option["NORMAL2"] = option["BEBADO"] = 0;
@@ -395,12 +395,12 @@ void Game::HandleMouse(const int button, const int btnState, const int x, const 
 							option["30x15"] = 0;
 							option["50x25"] = 0;
 							option[cursorSelec] = 1;
-						} else if(cursorSelec == "Cores1" ||
-								  cursorSelec == "Cores2" ||
-								  cursorSelec == "Cores3") {
-							option["Cores1"] = 0;
-							option["Cores2"] = 0;
-							option["Cores3"] = 0;
+						} else if(cursorSelec == "CORES1" ||
+								  cursorSelec == "CORES2" ||
+								  cursorSelec == "CORES3") {
+							option["CORES1"] = 0;
+							option["CORES2"] = 0;
+							option["CORES3"] = 0;
 							option[cursorSelec] = 1;
 						} else if(cursorSelec == "NORMAL2" ||
 								  cursorSelec == "BEBADO") {
