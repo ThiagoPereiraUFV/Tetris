@@ -36,18 +36,18 @@ void Menu::setView(const GLfloat &view_w, const GLfloat &view_h) {
 	p1 = make_pair(-view_h*0.4, -view_h*0.14);
 	boxPos = {
 		{"INICIAR", make_pair(-p1.first/2, view_h*0.8)},
-		{"NORMAL1", make_pair(-p1.first/2 - view_h*0.45, view_h*0.5)},
-		{"RAPIDO", make_pair(-p1.first/2, view_h*0.5)},
-		{"TURBO", make_pair(-1*(p1.first/2 - view_h*0.45), view_h*0.5)},
-		{"20x10", make_pair(-p1.first/2 - view_h*0.45, view_h*0.2)},
-		{"30x15", make_pair(-p1.first/2, view_h*0.2)},
-		{"50x25", make_pair(-1*(p1.first/2 - view_h*0.45), view_h*0.2)},
-		{"CORES1", make_pair(-p1.first/2 - view_h*0.45, -view_h*0.1)},
-		{"CORES2", make_pair(-p1.first/2, -view_h*0.1)},
-		{"CORES3", make_pair(-1*(p1.first/2 - view_h*0.45), -view_h*0.1)},
-		{"NORMAL2", make_pair(-p1.first/2 - view_h*0.25, -view_h*0.4)},
-		{"BEBADO", make_pair(-1*(p1.first/2 - view_h*0.25), -view_h*0.4)},
-		{"SAIR", make_pair(-p1.first/2, -view_h*0.7)}
+		{"NORMAL1", make_pair(-p1.first/2 - view_h*0.45, view_h*0.52)},
+		{"RAPIDO", make_pair(-p1.first/2, view_h*0.52)},
+		{"TURBO", make_pair(-1*(p1.first/2 - view_h*0.45), view_h*0.52)},
+		{"20x10", make_pair(-p1.first/2 - view_h*0.45, view_h*0.22)},
+		{"30x15", make_pair(-p1.first/2, view_h*0.22)},
+		{"50x25", make_pair(-1*(p1.first/2 - view_h*0.45), view_h*0.22)},
+		{"CORES1", make_pair(-p1.first/2 - view_h*0.45, -view_h*0.22-p1.second)},
+		{"CORES2", make_pair(-p1.first/2, -view_h*0.22-p1.second)},
+		{"CORES3", make_pair(-1*(p1.first/2 - view_h*0.45), -view_h*0.22-p1.second)},
+		{"NORMAL2", make_pair(-p1.first/2 - view_h*0.25, -view_h*0.52-p1.second)},
+		{"BEBADO", make_pair(-1*(p1.first/2 - view_h*0.25), -view_h*0.52-p1.second)},
+		{"SAIR", make_pair(-p1.first/2, -view_h*0.8-p1.second)}
 	};
 }
 
@@ -124,25 +124,49 @@ void Menu::renderMenu() {
 	drawButton(boxPos[optNames[0]], optNames[0]);
 
 	//	Velocidade
-	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[0]].second+p1.second + boxPos[optNames[2]].second)/2.0, sxmenu, symenu, "VELOCIDADE");
+	drawText(
+		boxPos[optNames[0]].first + p1.first / 2,
+		(boxPos[optNames[0]].second+p1.second + boxPos[optNames[2]].second)/2.0,
+		sxmenu,
+		symenu,
+		"VELOCIDADE"
+	);
 	drawButton(boxPos[optNames[1]], optNames[1]);
 	drawButton(boxPos[optNames[2]], optNames[2]);
 	drawButton(boxPos[optNames[3]], optNames[3]);
 
 	//	Tamanho
-	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[2]].second+p1.second + boxPos[optNames[5]].second)/2.0, sxmenu, symenu, "TAMANHO");
+	drawText(
+		boxPos[optNames[0]].first + p1.first / 2,
+		(boxPos[optNames[2]].second+p1.second + boxPos[optNames[5]].second)/2.0,
+		sxmenu,
+		symenu,
+		"TAMANHO"
+	);
 	drawButton(boxPos[optNames[4]], optNames[4]);
 	drawButton(boxPos[optNames[5]], optNames[5]);
 	drawButton(boxPos[optNames[6]], optNames[6]);
 
 	//	Cores
-	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[5]].second+p1.second + boxPos[optNames[8]].second)/2.0, sxmenu, symenu, "CORES");
+	drawText(
+		boxPos[optNames[0]].first + p1.first / 2,
+		(boxPos[optNames[5]].second+p1.second + boxPos[optNames[8]].second)/2.0,
+		sxmenu,
+		symenu,
+		"CORES"
+	);
 	drawButton(boxPos[optNames[7]], optNames[7]);
 	drawButton(boxPos[optNames[8]], optNames[8]);
 	drawButton(boxPos[optNames[9]], optNames[9]);
 
 	//	Modo
-	drawText(boxPos[optNames[0]].first + p1.first / 2, (boxPos[optNames[8]].second+p1.second + boxPos[optNames[10]].second)/2.0, sxmenu, symenu, "MODO");
+	drawText(
+		boxPos[optNames[0]].first + p1.first / 2,
+		(boxPos[optNames[8]].second+p1.second + boxPos[optNames[10]].second)/2.0,
+		sxmenu,
+		symenu,
+		"MODO"
+	);
 	drawButton(boxPos[optNames[10]], optNames[10]);
 	drawButton(boxPos[optNames[11]], optNames[11]);
 
