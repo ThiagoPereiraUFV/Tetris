@@ -36,12 +36,10 @@ void Play::spinDisplay(const int x) {
 //	Funcao utilizada para desenhar um quadrado dada uma posicao e um caractere
 void Play::exibeObjeto(const GLint x, const GLint y, const char c) {
 	if(c == ' ') {
-		glColor3f(1.0 - colors[color]["Piece"][0], 1.0 - colors[color]["Piece"][1],
-		          1.0 - colors[color]["Piece"][2]);
+		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	} else {
-		glColor3f(colors[color]["Piece"][0], colors[color]["Piece"][1],
-		          colors[color]["Piece"][2]);
+		glColor3f(colors[color]["Piece"][0], colors[color]["Piece"][1], colors[color]["Piece"][2]);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	}
 
