@@ -77,6 +77,10 @@ void Game::init() {
 
 //	Resize game elements to keep ratio
 void Game::reshape(const GLsizei w, const GLsizei h) {
+	if(w < WINDOW_WIDTH) {
+		glutReshapeWindow(WINDOW_WIDTH, h);
+	}
+
 	view_w = w / 2;
 	view_h = h / 2;
 	Play::setView(view_w, view_h);
