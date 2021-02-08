@@ -66,21 +66,21 @@ string Menu::mousePointer(const GLint x, const GLint y) {
 }
 
 //	Draw text given text, scale and position
-void Menu::drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text) {
-	string out = text;
+void Menu::drawText(const pair<GLfloat, GLfloat>& pos, const pair<GLfloat, GLfloat>& scl, const string str) {
+	string out = str;
 	if(out == "NORMAL1" || out == "NORMAL2")
 		out = "NORMAL";
-	const unsigned char* str = (unsigned char*)out.c_str();
+	const unsigned char* text = (unsigned char*)out.c_str();
 
-	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, str)*sx;
-	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*sy;
+	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, text)*scl.first;
+	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*scl.second;
 
 	glPushMatrix();
 	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 	glLineWidth(2);
-	glTranslatef(x - length/2.0, y - height/2.0, 0);
-	glScalef(sx, sy, 1.0);
-	glutStrokeString(GLUT_STROKE_MONO_ROMAN, str);
+	glTranslatef(pos.first - length/2.0, pos.second - height/2.0, 0);
+	glScalef(scl.first, scl.second, 1.0);
+	glutStrokeString(GLUT_STROKE_MONO_ROMAN, text);
 	glPopMatrix();
 }
 
@@ -119,7 +119,7 @@ void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
 		glPopMatrix();
 	}
 
-	drawText(pos.first+p1.first/2.0, pos.second+p1.second/2.0, sxmenu, symenu, text);
+	drawText(make_pair(pos.first+p1.first/2.0, pos.second+p1.second/2.0), make_pair(sxmenu, symenu), text);
 }
 
 //	Render menu elements
@@ -129,10 +129,14 @@ void Menu::renderMenu() {
 
 	//	Velocidade
 	drawText(
-		boxPos[optNames[0]].first + p1.first / 2,
-		(boxPos[optNames[0]].second+p1.second + boxPos[optNames[2]].second)/2.0,
-		sxmenu,
-		symenu,
+		make_pair(
+			boxPos[optNames[0]].first + p1.first / 2,
+			(boxPos[optNames[0]].second+p1.second + boxPos[optNames[2]].second)/2.0
+		),
+		make_pair(
+			sxmenu,
+			symenu
+		),
 		"VELOCIDADE"
 	);
 	drawButton(boxPos[optNames[1]], optNames[1]);
@@ -141,10 +145,14 @@ void Menu::renderMenu() {
 
 	//	Tamanho
 	drawText(
-		boxPos[optNames[0]].first + p1.first / 2,
-		(boxPos[optNames[2]].second+p1.second + boxPos[optNames[5]].second)/2.0,
-		sxmenu,
-		symenu,
+		make_pair(
+			boxPos[optNames[0]].first + p1.first / 2,
+			(boxPos[optNames[2]].second+p1.second + boxPos[optNames[5]].second)/2.0
+		),
+		make_pair(
+			sxmenu,
+			symenu
+		),
 		"TAMANHO"
 	);
 	drawButton(boxPos[optNames[4]], optNames[4]);
@@ -153,10 +161,14 @@ void Menu::renderMenu() {
 
 	//	Cores
 	drawText(
-		boxPos[optNames[0]].first + p1.first / 2,
-		(boxPos[optNames[5]].second+p1.second + boxPos[optNames[8]].second)/2.0,
-		sxmenu,
-		symenu,
+		make_pair(
+			boxPos[optNames[0]].first + p1.first / 2,
+			(boxPos[optNames[5]].second+p1.second + boxPos[optNames[8]].second)/2.0
+		),
+		make_pair(
+			sxmenu,
+			symenu
+		),
 		"CORES"
 	);
 	drawButton(boxPos[optNames[7]], optNames[7]);
@@ -165,10 +177,14 @@ void Menu::renderMenu() {
 
 	//	Modo
 	drawText(
-		boxPos[optNames[0]].first + p1.first / 2,
-		(boxPos[optNames[8]].second+p1.second + boxPos[optNames[10]].second)/2.0,
-		sxmenu,
-		symenu,
+		make_pair(
+			boxPos[optNames[0]].first + p1.first / 2,
+			(boxPos[optNames[8]].second+p1.second + boxPos[optNames[10]].second)/2.0
+		),
+		make_pair(
+			sxmenu,
+			symenu
+		),
 		"MODO"
 	);
 	drawButton(boxPos[optNames[10]], optNames[10]);

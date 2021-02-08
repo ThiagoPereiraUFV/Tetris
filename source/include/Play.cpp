@@ -108,8 +108,8 @@ void Play::drawTable() {
 void Play::renderGameFrame() {
 	if(gameDynamic.getAltura() > maxHeight) {
 		const string p = "PONTUACAO: " + to_string(score);
-		drawText(0, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
-		drawText(0, -view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
+		drawText(make_pair(0, view_h * 0.1), make_pair(view_h * 0.0008, view_h * 0.0008), "VOCE PERDEU!");
+		drawText(make_pair(0, -view_h * 0.1), make_pair(view_h * 0.0008, view_h * 0.0008), p);
 		state = 3;
 		return;
 	}
@@ -165,17 +165,17 @@ void Play::setView(const GLfloat &view_w, const GLfloat &view_h) {
 }
 
 //	Draw text given text, scale and position
-void Play::drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text) {
-	const unsigned char* str = (unsigned char*)text.c_str();
+void Play::drawText(const pair<GLfloat, GLfloat>& pos, const pair<GLfloat, GLfloat>& scl, const string str) {
+	const unsigned char* text = (unsigned char*)str.c_str();
 
-	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, str)*sx;
-	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*sy;
+	const GLfloat length = glutStrokeLength(GLUT_STROKE_MONO_ROMAN, text)*scl.first;
+	const GLfloat height = glutStrokeHeight(GLUT_STROKE_MONO_ROMAN)*scl.second;
 
 	glPushMatrix();
 	glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 	glLineWidth(2);
-	glTranslatef(x - length/2.0, y - height/2.0, 0);
-	glScalef(sx, sy, 1.0);
-	glutStrokeString(GLUT_STROKE_MONO_ROMAN, str);
+	glTranslatef(pos.first - length/2.0, pos.second - height/2.0, 0);
+	glScalef(scl.first, scl.second, 1.0);
+	glutStrokeString(GLUT_STROKE_MONO_ROMAN, text);
 	glPopMatrix();
 }

@@ -26,15 +26,15 @@ class Game {
 		static unordered_map<int, string> selecI;	//  Map button id to its name
 		static unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;   //	Color scheme
 	public:
-		static void game(int argc, char** argv);
+		static void game(int, char**);
 		static void init();
 		static void display();
 		static void updateColors();
-		static void reshape(const GLsizei w, const GLsizei h);
-		static void SpecialKeys(const int key, const int x, const int y);
-		static void HandleKeyboard(const unsigned char key, const int x, const int y);
-		static void HandleMouse(const int button, const int btnState, const int x, const int y);
-		static void MousePassiveMotion(const int x, const int y);
+		static void reshape(const GLsizei, const GLsizei);
+		static void SpecialKeys(const int, const int, const int);
+		static void HandleKeyboard(const unsigned char, const int, const int);
+		static void HandleMouse(const int, const int, const int, const int);
+		static void MousePassiveMotion(const int, const int);
 };
 
 #endif

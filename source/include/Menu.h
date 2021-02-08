@@ -23,14 +23,14 @@ class Menu {
 		static vector<string> optNames;	//  Button names
 	public:
 		static void setup(
-			const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-			const string &color, const unordered_map<string, bool> &option,
-			const unordered_map<string, pair<int, bool>> &selecN
+			const unordered_map<string, unordered_map<string, vector<GLfloat>>>&,
+			const string&, const unordered_map<string, bool>&,
+			const unordered_map<string, pair<int, bool>>&
 		);
-		static void setView(const GLfloat &view_w, const GLfloat &view_h);
-		static string mousePointer(const GLint x, const GLint y);
-		static void drawText(const GLfloat x, const GLfloat y, const GLfloat sx, const GLfloat sy, const string text);
-		static void drawButton(const pair<GLfloat, GLfloat> &pos, const string text);
+		static void setView(const GLfloat&, const GLfloat&);
+		static string mousePointer(const GLint, const GLint);
+		static void drawText(const pair<GLfloat, GLfloat>&, const pair<GLfloat, GLfloat>&, const string);
+		static void drawButton(const pair<GLfloat, GLfloat>&, const string);
 		static void renderMenu();
 };
 

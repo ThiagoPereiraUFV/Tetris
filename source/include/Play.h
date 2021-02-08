@@ -40,7 +40,7 @@ class Play {
 		static void renderGameFrame();
 		static void drawSquare(const GLint, const GLint, const char);
 		static void setView(const GLfloat&, const GLfloat&);
-		static void drawText(const GLfloat, const GLfloat, const GLfloat, const GLfloat, const string);
+		static void drawText(const pair<GLfloat, GLfloat>&, const pair<GLfloat, GLfloat>&, const string);
 };
 
 #endif
