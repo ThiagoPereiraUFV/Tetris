@@ -7,18 +7,15 @@ Tetris::Tetris(const int width) {
 
 void Tetris::build(const int width) {
 	game = new char*[width];
-	heights.resize(width);
+	heights.resize(width, 0);
 	for(int i = 0; i < width; i++) {
 		game[i] = NULL;
-		heights[i] = 0;
 	}
 	this->width = width;
 }
 
 int Tetris::getHeight() const {
-	int mx = 0;
-	for(int i = 0; i < width; i++) mx = std::max(mx, heights[i]);
-	return mx;
+	return *max_element(begin(heights), end(heights));
 }
 
 void Tetris::removeColumns(const int col) {
@@ -90,7 +87,7 @@ void Tetris::removeRows() {
 	}
 }
 
-int Tetris::getColumnsNum() const {
+int Tetris::getWidth() const {
 	return width;
 }
 
@@ -115,10 +112,10 @@ Tetris &Tetris::operator=(const Tetris& other) {
 	build(other.width);
 
 	for(int i = 0;i < width; i++) {
-		int altura = other.heights[i];
-		heights[i] = altura;
-		game[i] = new char[altura];
-		for(int j = 0; j < altura; j++) game[i][j] = other.game[i][j];
+		int height = other.heights[i];
+		heights[i] = height;
+		game[i] = new char[height];
+		for(int j = 0; j < height; j++) game[i][j] = other.game[i][j];
 	}
 	return *this;
 }
@@ -139,8 +136,8 @@ void Tetris::rotateCW(char piece[4][5]) {
 	for(int i = 0; i < 4; i++)
 		for(int j = 0; j < 4; j++)
 			if(temp[i][j] != ' ') {
-				l = std::min(l, i);
-				c = std::min(c, j);
+				l = min(l, i);
+				c = min(c, j);
 			}
 
 	//translada a piece de modo que ela fique "encostando"
@@ -151,14 +148,14 @@ void Tetris::rotateCW(char piece[4][5]) {
 				piece[i][j] = temp[i+l][j+c];
 }
 
-bool Tetris::ableToAddPiece(const int linhaMinimaInserir, const char piece[4][5], const int posicao) const {
+bool Tetris::ableToAddPiece(const int linhaMinimaInserir, const char piece[4][5], const int pos) const {
 	for(int c = 0; c < 4; c++) {
 		for(int l = 0; l < 4; l++) {
 			if(piece[l][c] == ' ') continue;
 			//verifique se l,c colide com o game...
 			int lJogo = linhaMinimaInserir - l;
-			int cJogo = c+posicao;
-			if(lJogo < 0 || cJogo < 0 || cJogo >= getColumnsNum()) return false;
+			int cJogo = c+pos;
+			if(lJogo < 0 || cJogo < 0 || cJogo >= getWidth()) return false;
 			if(lJogo < heights[cJogo] && game[cJogo][lJogo] != ' ') return false;
 
 		}
@@ -166,17 +163,17 @@ bool Tetris::ableToAddPiece(const int linhaMinimaInserir, const char piece[4][5]
 	return true;
 }
 
-bool Tetris::addPiece(const int posicao, const int altura, const char piece[4][5]) {
-	int linhaMinimaInserir = altura; //temos que comecar em uma posicao acima da altura maxima..
-	if(!ableToAddPiece(linhaMinimaInserir, piece, posicao)) {
+bool Tetris::addPiece(const int pos, const int height, const char piece[4][5]) {
+	int linhaMinimaInserir = height; //temos que comecar em uma pos acima da height maxima..
+	if(!ableToAddPiece(linhaMinimaInserir, piece, pos)) {
 		return false; //a insercao da piece falhou!
 	}
 
 
 	//insere a piece...
 	for(int c = 0; c < 4; c++) {
-		int cJogo = c+posicao; //col do game onde iremos inserir a col atual da piece..
-		if(cJogo >= getColumnsNum()) continue;
+		int cJogo = c+pos; //col do game onde iremos inserir a col atual da piece..
+		if(cJogo >= getWidth()) continue;
 		int novaAlturaMaximaColuna = heights[cJogo];
 
 		bool temPecaAdicionar = false;
@@ -208,7 +205,7 @@ bool Tetris::addPiece(const int posicao, const int altura, const char piece[4][5
 	return true;
 }
 
-bool Tetris::addPiece(const int posicao, const int altura, const char id, const int rotacao) {
+bool Tetris::addPiece(const int pos, const int height, const char id, const int rot) {
 	//implementacao simples, mas nao a mais eficiente...
 	const static char pecas[7][4][5] = {
 		{
@@ -248,7 +245,7 @@ bool Tetris::addPiece(const int posicao, const int altura, const char id, const 
 			"    "
 		}
 	};
-	char posPeca[256];
+	vector<char> posPeca(256);
 	posPeca['I'] = 0;
 	posPeca['J'] = 1;
 	posPeca['L'] = 2;
@@ -260,11 +257,11 @@ bool Tetris::addPiece(const int posicao, const int altura, const char id, const 
 	char piece[4][5] = {0};
 	for(int i = 0; i < 4; i++) for(int j = 0; j < 4; j++) piece[i][j] = pecas[posPeca[id]][i][j];
 
-	int numRotate = rotacao/90;
+	int numRotate = rot/90;
 	for(int i = 0; i < numRotate; i++)
 		rotateCW(piece);
 
-	return addPiece(posicao,altura, piece);
+	return addPiece(pos, height, piece);
 }
 
 char Tetris::get(const int col, const int row) const {
