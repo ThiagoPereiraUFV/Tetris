@@ -112,8 +112,8 @@ void Game::display() {
 		case 1:
 			srand(time(NULL));
 			Play::setup(colors, color, option);
-			Play::configVars();
-			Play::configGame();
+			Play::setUpVars();
+			Play::setUpGame();
 			state = 2;
 			Play::setState(state);
 			break;

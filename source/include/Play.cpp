@@ -3,15 +3,15 @@
 int Play::state;
 GLfloat Play::spin;
 string Play::color;
-pair<int, int> Play::tam;
+pair<int, int> Play::tableSize;
 GLfloat Play::view_w, Play::view_h;
 char Play::idPecaAtual, Play::lastKey;
-Tetris Play::jogo, Play::jogoComPecaCaindo;
-int Play::posicaoPecaAtual, Play::rotacaoPecaAtual;
-int Play::vel, Play::altura, Play::alturaOld, Play::pontos;
-int Play::larguraJogo, Play::alturaMaximaJogo, Play::alturaPecaAtual;
+Tetris Play::gameStatic, Play::gameDynamic;
+int Play::piecePosition, Play::pieceRotation;
+int Play::speed, Play::height, Play::lastHeight, Play::score;
+int Play::width, Play::maxHeight, Play::pieceHeight;
 unordered_map<string, bool> Play::option;
-const vector<GLint> Play::possiveisRotacoes{0, 90, 180, 270};
+const vector<GLint> Play::rotations{0, 90, 180, 270};
 unordered_map<string, unordered_map<string, vector<GLfloat>>> Play::colors;
 
 void Play::setup(
@@ -34,7 +34,7 @@ void Play::spinDisplay(const int x) {
 }
 
 //	Funcao utilizada para desenhar um quadrado dada uma posicao e um caractere
-void Play::exibeObjeto(const GLint x, const GLint y, const char c) {
+void Play::drawSquare(const GLint x, const GLint y, const char c) {
 	if(c == ' ') {
 		glColor3f(colors[color]["Text"][0], colors[color]["Text"][1], colors[color]["Text"][2]);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -46,117 +46,117 @@ void Play::exibeObjeto(const GLint x, const GLint y, const char c) {
 	glPushMatrix();
 	if(option["BEBADO"])
 		glRotatef(spin, 0.0, 0.0, 1.0);
-	glTranslatef(-larguraJogo * view_h / alturaMaximaJogo +
-	                 x * 2 * (GLfloat(view_h / alturaMaximaJogo)),
-	             -view_h + y * 2 * (GLfloat(view_h / alturaMaximaJogo)), 0);
-	glRectf(0, 0, 2 * view_h / alturaMaximaJogo, 2 * view_h / alturaMaximaJogo);
+	glTranslatef(-width * view_h / maxHeight +
+	                 x * 2 * (GLfloat(view_h / maxHeight)),
+	             -view_h + y * 2 * (GLfloat(view_h / maxHeight)), 0);
+	glRectf(0, 0, 2 * view_h / maxHeight, 2 * view_h / maxHeight);
 	glPopMatrix();
 }
 
-//	Funcao utilizada para desenhar o estado atual do tabuleiro do jogo
-void Play::exibeJogo() {
-	for(int i = 0; i < alturaMaximaJogo; i++)
-		for(int j = 0; j < larguraJogo; j++)
-			exibeObjeto(j, alturaMaximaJogo - i - 1, jogoComPecaCaindo.get(j, alturaMaximaJogo - i - 1));
+//	Funcao utilizada para desenhar o estado atual do tabuleiro do gameStatic
+void Play::drawTable() {
+	for(int i = 0; i < maxHeight; i++)
+		for(int j = 0; j < width; j++)
+			drawSquare(j, maxHeight - i - 1, gameDynamic.get(j, maxHeight - i - 1));
 }
 
-//	Funcao utilizada para renderizar o frame atual do jogo e posicionar uma peca
+//	Funcao utilizada para renderizar o frame atual do gameStatic e posicionar uma peca
 void Play::renderGameFrame() {
 	glClear(GL_COLOR_BUFFER_BIT);
-	if(jogoComPecaCaindo.getAltura() > alturaMaximaJogo) {
-		const string p = "PONTUACAO: " + to_string(pontos);
+	if(gameDynamic.getAltura() > maxHeight) {
+		const string p = "PONTUACAO: " + to_string(score);
 		drawText(0, view_h * 0.1, view_h * 0.0008, view_h * 0.0008, "VOCE PERDEU!");
 		drawText(0, -view_h * 0.1, view_h * 0.0008, view_h * 0.0008, p);
 		state = 3;
 		return;
 	}
-	jogoComPecaCaindo = jogo;
+	gameDynamic = gameStatic;
 
 	if(lastKey == 'l') {
-		Tetris jogoTeste = jogoComPecaCaindo;
-		if(jogoTeste.adicionaForma(posicaoPecaAtual - 1, alturaPecaAtual,
+		Tetris jogoTeste = gameDynamic;
+		if(jogoTeste.adicionaForma(piecePosition - 1, pieceHeight,
 		                           idPecaAtual,
-		                           possiveisRotacoes[rotacaoPecaAtual]))
-			posicaoPecaAtual--;
+		                           rotations[pieceRotation]))
+			piecePosition--;
 	} else if(lastKey == 'r') {
-		Tetris jogoTeste = jogoComPecaCaindo;
-		if(jogoTeste.adicionaForma(posicaoPecaAtual + 1, alturaPecaAtual,
+		Tetris jogoTeste = gameDynamic;
+		if(jogoTeste.adicionaForma(piecePosition + 1, pieceHeight,
 		                           idPecaAtual,
-		                           possiveisRotacoes[rotacaoPecaAtual]))
-			posicaoPecaAtual++;
+		                           rotations[pieceRotation]))
+			piecePosition++;
 	} else if(lastKey == 's') {
-		Tetris jogoTeste = jogoComPecaCaindo;
+		Tetris jogoTeste = gameDynamic;
 		if(jogoTeste.adicionaForma(
-		       posicaoPecaAtual, alturaPecaAtual, idPecaAtual,
-		       possiveisRotacoes[(rotacaoPecaAtual + 1) % 4]))
-			rotacaoPecaAtual = (rotacaoPecaAtual + 1) % 4;
+		       piecePosition, pieceHeight, idPecaAtual,
+		       rotations[(pieceRotation + 1) % 4]))
+			pieceRotation = (pieceRotation + 1) % 4;
 	}
 
-	if(jogoComPecaCaindo.adicionaForma(posicaoPecaAtual, alturaPecaAtual - 1, idPecaAtual, possiveisRotacoes[rotacaoPecaAtual])) {
-		alturaPecaAtual--;
+	if(gameDynamic.adicionaForma(piecePosition, pieceHeight - 1, idPecaAtual, rotations[pieceRotation])) {
+		pieceHeight--;
 	} else {
-		jogo.adicionaForma(posicaoPecaAtual, alturaPecaAtual, idPecaAtual, possiveisRotacoes[rotacaoPecaAtual]);
-		jogoComPecaCaindo = jogo;
+		gameStatic.adicionaForma(piecePosition, pieceHeight, idPecaAtual, rotations[pieceRotation]);
+		gameDynamic = gameStatic;
 		idPecaAtual = "IJLOSTZ"[rand() % 7];
-		posicaoPecaAtual = larguraJogo / 2 - 2;
-		alturaPecaAtual = alturaMaximaJogo;
-		rotacaoPecaAtual = rand() % 4;
-		alturaOld = jogoComPecaCaindo.getAltura();
-		jogoComPecaCaindo.removeLinhasCompletas();
-		altura = jogoComPecaCaindo.getAltura();
-		if(altura != alturaOld)
-			pontos++;
-		jogo = jogoComPecaCaindo;
+		piecePosition = width / 2 - 2;
+		pieceHeight = maxHeight;
+		pieceRotation = rand() % 4;
+		lastHeight = gameDynamic.getAltura();
+		gameDynamic.removeLinhasCompletas();
+		height = gameDynamic.getAltura();
+		if(height != lastHeight)
+			score++;
+		gameStatic = gameDynamic;
 	}
-	exibeJogo();
+	drawTable();
 	if(lastKey == 'a')
-		usleep(vel - vel * 0.8);
+		usleep(speed - speed * 0.8);
 	else
-		usleep(vel);
+		usleep(speed);
 	lastKey = ' ';
 }
 
 //	Funcao utilizada para configurar inicializar o tamanho do tabuleiro
-void Play::configGame() {
-	alturaMaximaJogo = tam.first;
-	larguraJogo = tam.second;
-	jogo = Tetris(larguraJogo);
-	jogoComPecaCaindo = Tetris(larguraJogo);
+void Play::setUpGame() {
+	maxHeight = tableSize.first;
+	width = tableSize.second;
+	gameStatic = Tetris(width);
+	gameDynamic = Tetris(width);
 
-	alturaPecaAtual = alturaMaximaJogo;
+	pieceHeight = maxHeight;
 	idPecaAtual = "IJLOSTZ"[rand() % 7];
-	posicaoPecaAtual = larguraJogo / 2 - 2;
-	alturaPecaAtual = alturaMaximaJogo;
-	rotacaoPecaAtual = 0;
-	pontos = 0;
+	piecePosition = width / 2 - 2;
+	pieceHeight = maxHeight;
+	pieceRotation = 0;
+	score = 0;
 }
 
 //	Funcao utilizada para determinar o tamanho desejado do tabuleiro, alem da velocidade e o modo bebado
-void Play::configVars() {
+void Play::setUpVars() {
 	if(option["20x10"]) {
-		tam = make_pair(20, 10);
+		tableSize = make_pair(20, 10);
 		if(option["NORMAL1"])
-			vel = 200000;
+			speed = 200000;
 		else if(option["RAPIDO"])
-			vel = 80000;
+			speed = 80000;
 		else
-			vel = 70000;
+			speed = 70000;
 	} else if(option["30x15"]) {
-		tam = make_pair(30, 15);
+		tableSize = make_pair(30, 15);
 		if(option["NORMAL1"])
-			vel = 80000;
+			speed = 80000;
 		else if(option["RAPIDO"])
-			vel = 60000;
+			speed = 60000;
 		else
-			vel = 40000;
+			speed = 40000;
 	} else {
-		tam = make_pair(50, 25);
+		tableSize = make_pair(50, 25);
 		if(option["NORMAL1"])
-			vel = 50000;
+			speed = 50000;
 		else if(option["RAPIDO"])
-			vel = 40000;
+			speed = 40000;
 		else
-			vel = 30000;
+			speed = 30000;
 	}
 	if(option["BEBADO"]) {
 		spin = 0.0;
