@@ -106,7 +106,7 @@ void Play::drawTable() {
 
 //	Render current game frame
 void Play::renderGameFrame() {
-	if(gameDynamic.getAltura() > maxHeight) {
+	if(gameDynamic.getHeight() > maxHeight) {
 		const string p = "PONTUACAO: " + to_string(score);
 		drawText(make_pair(0, view_h * 0.1), make_pair(view_h * 0.0008, view_h * 0.0008), "VOCE PERDEU!");
 		drawText(make_pair(0, -view_h * 0.1), make_pair(view_h * 0.0008, view_h * 0.0008), p);
@@ -118,32 +118,32 @@ void Play::renderGameFrame() {
 
 	if(lastKey == 'l') {
 		Tetris jogoTeste = gameDynamic;
-		if(jogoTeste.adicionaForma(piecePosition - 1, pieceHeight, pieceId, rotations[pieceRotation])) {
+		if(jogoTeste.addPiece(piecePosition - 1, pieceHeight, pieceId, rotations[pieceRotation])) {
 			piecePosition--;
 		}
 	} else if(lastKey == 'r') {
 		Tetris jogoTeste = gameDynamic;
-		if(jogoTeste.adicionaForma(piecePosition + 1, pieceHeight, pieceId, rotations[pieceRotation])) {
+		if(jogoTeste.addPiece(piecePosition + 1, pieceHeight, pieceId, rotations[pieceRotation])) {
 			piecePosition++;
 		}
 	} else if(lastKey == 's') {
 		Tetris jogoTeste = gameDynamic;
-		if(jogoTeste.adicionaForma(piecePosition, pieceHeight, pieceId, rotations[(pieceRotation + 1) % 4]))
+		if(jogoTeste.addPiece(piecePosition, pieceHeight, pieceId, rotations[(pieceRotation + 1) % 4]))
 			pieceRotation = (pieceRotation + 1) % 4;
 	}
 
-	if(gameDynamic.adicionaForma(piecePosition, pieceHeight - 1, pieceId, rotations[pieceRotation])) {
+	if(gameDynamic.addPiece(piecePosition, pieceHeight - 1, pieceId, rotations[pieceRotation])) {
 		pieceHeight--;
 	} else {
-		gameStatic.adicionaForma(piecePosition, pieceHeight, pieceId, rotations[pieceRotation]);
+		gameStatic.addPiece(piecePosition, pieceHeight, pieceId, rotations[pieceRotation]);
 		gameDynamic = gameStatic;
 		pieceId = "IJLOSTZ"[rand() % 7];
 		piecePosition = width / 2 - 2;
 		pieceHeight = maxHeight;
 		pieceRotation = rand() % 4;
-		lastHeight = gameDynamic.getAltura();
-		gameDynamic.removeLinhasCompletas();
-		height = gameDynamic.getAltura();
+		lastHeight = gameDynamic.getHeight();
+		gameDynamic.removeRows();
+		height = gameDynamic.getHeight();
 		if(height != lastHeight)
 			score++;
 		gameStatic = gameDynamic;
