@@ -1,5 +1,5 @@
 <h1 align="center">
-		Tetris v1.0
+	Tetris v1.0
 </h1>
 
 <h4 align="center">
@@ -26,12 +26,12 @@
 <br>
 
 <p align="center">
-	<img alt="Tetris" src="public/tetris.gif" width="100%">
+	<img alt="Tetris" src=".github/tetris.gif" width="100%">
 </p>
 
 ## :rocket: Technologies
 
-This project was build using following technologies:
+This project was built using following technologies:
 
 - [C++](https://www.cplusplus.com/)
 - [OpenGL](https://www.opengl.org/)
@@ -47,13 +47,13 @@ __You must install Ncurses and OpenGL libraries using the following commands on 
 
 ```bash
 # Update packages (on Linux devices)
-$ sudo apt-get update
+$ sudo apt update
 
-# Intall Ncurses library
-$ sudo apt-get install libncurses-dev
+# Install Ncurses library
+$ sudo apt install libncurses-dev
 
 # Install OpenGL library and its dependencies
-$ sudo apt-get install libglu1-mesa-dev freeglut3-dev mesa-common-dev
+$ sudo apt install libglu1-mesa-dev freeglut3-dev mesa-common-dev
 ```
 
 __Execute the following commands to compile the code and run the game on your Terminal:__
@@ -76,5 +76,5 @@ This project is under MIT License. Check out [LICENSE](LICENSE) file to more det
 ---
 
 <p align="center">
-	Build with :hearts: by <a href="https://github.com/ThiagoPereiraUFV" target="_blank"> Thiago Pereira </a>
+	Built with :hearts: by <a href="https://github.com/ThiagoPereiraUFV" target="_blank"> Thiago Pereira</a>
 </p>
