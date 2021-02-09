@@ -71,7 +71,7 @@ $ make clean
 
 ## :memo: License
 
-This project is under MIT License. Check out [LICENSE](LICENSE.md) file to more details.
+This project is under MIT License. Check out [LICENSE](/LICENSE.md) file to more details.
 
 ---
 
