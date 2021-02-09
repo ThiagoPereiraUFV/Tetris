@@ -11,13 +11,9 @@
 
 <img alt="Repository size" src="https://img.shields.io/github/repo-size/ThiagoPereiraUFV/Tetris">
 
-<a href="commits/master">
-	<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ThiagoPereiraUFV/Tetris">
-</a>
+<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ThiagoPereiraUFV/Tetris">
 
-<a href="LICENSE">
-		<img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
-</a>
+<img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
 </p>
 
 <p align="center">
