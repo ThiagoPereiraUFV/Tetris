@@ -76,5 +76,5 @@ This project is under MIT License. Check out [LICENSE](LICENSE) file to more det
 ---
 
 <p align="center">
-	Built with :hearts: by <a href="https://github.com/ThiagoPereiraUFV" target="_blank"> Thiago Pereira</a>
+	Built with :hearts: by <a href="https://github.com/ThiagoPereiraUFV" target="_blank">Thiago Pereira</a>
 </p>
