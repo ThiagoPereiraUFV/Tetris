@@ -7,17 +7,17 @@
 </h4>
 
 <p align="center">
-	<img alt="GitHub language count" src="https://img.shields.io/github/languages/count/ThiagoPereiraUFV/Tetris">
+<img alt="GitHub language count" src="https://img.shields.io/github/languages/count/ThiagoPereiraUFV/Tetris">
 
-	<img alt="Repository size" src="https://img.shields.io/github/repo-size/ThiagoPereiraUFV/Tetris">
+<img alt="Repository size" src="https://img.shields.io/github/repo-size/ThiagoPereiraUFV/Tetris">
 
-	<a href="commits/master">
-		<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ThiagoPereiraUFV/Tetris">
-	</a>
+<a href="commits/master">
+	<img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/ThiagoPereiraUFV/Tetris">
+</a>
 
-	<a href="LICENSE">
-			<img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
-	</a>
+<a href="LICENSE">
+		<img alt="License" src="https://img.shields.io/badge/license-MIT-brightgreen">
+</a>
 </p>
 
 <p align="center">
