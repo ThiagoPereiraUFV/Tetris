@@ -3,6 +3,7 @@
 #define TETRIS_H
 
 #include <vector>
+#include <string>
 #include <algorithm>
 
 using namespace std;
@@ -16,9 +17,9 @@ class Tetris {
 		bool isRowComplete(const int) const;
 		void removeRow(const int);
 		void build(const int);
-		void rotateCW(char[4][5]);
-		bool ableToAddPiece(const int, const char[4][5], const int) const;
-		bool addPiece(const int, const int, const char[4][5]);
+		void rotateCW(vector<string>&);
+		bool ableToAddPiece(const int, const vector<string>&, const int) const;
+		bool addPiece(const int, const int, const vector<string>&);
 	public:
 		Tetris() { };
 		Tetris(const int);

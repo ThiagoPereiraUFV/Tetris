@@ -121,7 +121,7 @@ Tetris &Tetris::operator=(const Tetris& other) {
 	return *this;
 }
 
-void Tetris::rotateCW(char piece[4][5]) {
+void Tetris::rotateCW(vector<string>& piece) {
 	//deve rodar a figura e desloca-la para o mais proximo possivel de 0,0
 	char temp[4][5];
 	for(int i = 0; i < 4; i++)
@@ -149,7 +149,7 @@ void Tetris::rotateCW(char piece[4][5]) {
 				piece[i][j] = temp[i+l][j+c];
 }
 
-bool Tetris::ableToAddPiece(const int linhaMinimaInserir, const char piece[4][5], const int pos) const {
+bool Tetris::ableToAddPiece(const int linhaMinimaInserir, const vector<string>& piece, const int pos) const {
 	for(int c = 0; c < 4; c++) {
 		for(int l = 0; l < 4; l++) {
 			if(piece[l][c] == ' ') continue;
@@ -164,7 +164,7 @@ bool Tetris::ableToAddPiece(const int linhaMinimaInserir, const char piece[4][5]
 	return true;
 }
 
-bool Tetris::addPiece(const int pos, const int height, const char piece[4][5]) {
+bool Tetris::addPiece(const int pos, const int height, const vector<string>& piece) {
 	int linhaMinimaInserir = height; //temos que comecar em uma pos acima da height maxima..
 	if(!ableToAddPiece(linhaMinimaInserir, piece, pos)) {
 		return false; //a insercao da piece falhou!
@@ -208,7 +208,7 @@ bool Tetris::addPiece(const int pos, const int height, const char piece[4][5]) {
 
 bool Tetris::addPiece(const int pos, const int height, const char id, const int rot) {
 	//implementacao simples, mas nao a mais eficiente...
-	const static char pecas[7][4][5] = {
+	const static vector<vector<string>> pieces = {
 		{
 			"I   ",
 			"I   ",
@@ -246,21 +246,21 @@ bool Tetris::addPiece(const int pos, const int height, const char id, const int 
 			"    "
 		}
 	};
-	vector<char> posPeca(256);
-	posPeca['I'] = 0;
-	posPeca['J'] = 1;
-	posPeca['L'] = 2;
-	posPeca['O'] = 3;
-	posPeca['S'] = 4;
-	posPeca['T'] = 5;
-	posPeca['Z'] = 6;
+	vector<char> posPiece(256);
+	posPiece['I'] = 0;
+	posPiece['J'] = 1;
+	posPiece['L'] = 2;
+	posPiece['O'] = 3;
+	posPiece['S'] = 4;
+	posPiece['T'] = 5;
+	posPiece['Z'] = 6;
 
-	char piece[4][5] = {0};
-	for(int i = 0; i < 4; i++) for(int j = 0; j < 4; j++) piece[i][j] = pecas[posPeca[id]][i][j];
+	vector<string> piece = pieces[posPiece[id]];
 
-	int numRotate = rot/90;
-	for(int i = 0; i < numRotate; i++)
+	const int numRotate = rot/90;
+	for(int i = 0; i < numRotate; i++) {
 		rotateCW(piece);
+	}
 
 	return addPiece(pos, height, piece);
 }
