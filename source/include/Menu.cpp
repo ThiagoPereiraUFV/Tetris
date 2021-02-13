@@ -16,9 +16,9 @@ vector<string> Menu::optNames{
 };
 
 void Menu::setup(
-		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-		const string &color, const unordered_map<string, bool> &option,
-		const unordered_map<string, pair<int, bool>> &selecN
+		const unordered_map<string, unordered_map<string, vector<GLfloat>>>& colors,
+		const string& color, const unordered_map<string, bool>& option,
+		const unordered_map<string, pair<int, bool>>& selecN
 	) {
 	Menu::colors = colors;
 	Menu::color = color;
@@ -27,7 +27,7 @@ void Menu::setup(
 }
 
 //	Set view variables to keep window ratio
-void Menu::setView(const GLfloat &view_w, const GLfloat &view_h) {
+void Menu::setView(const GLfloat& view_w, const GLfloat& view_h) {
 	Menu::view_w = view_w;
 	Menu::view_h = view_h;
 	sxmenu = view_h*0.0005;
@@ -85,7 +85,7 @@ void Menu::drawText(const pair<GLfloat, GLfloat>& pos, const pair<GLfloat, GLflo
 }
 
 //	Draw button given text and position
-void Menu::drawButton(const pair<GLfloat, GLfloat> &pos, const string text) {
+void Menu::drawButton(const pair<GLfloat, GLfloat>& pos, const string text) {
 	glPushMatrix();
 	glColor3f(colors[color]["BoxBack"][0], colors[color]["BoxBack"][1], colors[color]["BoxBack"][2]);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

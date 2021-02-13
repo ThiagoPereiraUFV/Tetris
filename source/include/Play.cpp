@@ -16,8 +16,8 @@ unordered_map<string, unordered_map<string, vector<GLfloat>>> Play::colors;
 
 //	Set up game color, size and mode
 void Play::setup(
-		const unordered_map<string, unordered_map<string, vector<GLfloat>>> &colors,
-		const string &color, const unordered_map<string, bool> &option
+		const unordered_map<string, unordered_map<string, vector<GLfloat>>>& colors,
+		const string& color, const unordered_map<string, bool>& option
 	) {
 	spin = 0;
 	Play::colors = colors;
@@ -106,7 +106,7 @@ void Play::drawTable() {
 
 //	Render current game frame
 void Play::renderGameFrame() {
-	if(gameDynamic.getHeight() > maxHeight) {
+	if(gameDynamic.getMaxHeight() > maxHeight) {
 		const string p = "PONTUACAO: " + to_string(score);
 		drawText(make_pair(0, view_h * 0.1), make_pair(view_h * 0.0008, view_h * 0.0008), "VOCE PERDEU!");
 		drawText(make_pair(0, -view_h * 0.1), make_pair(view_h * 0.0008, view_h * 0.0008), p);
@@ -142,7 +142,7 @@ void Play::renderGameFrame() {
 		pieceHeight = maxHeight;
 		pieceRotation = rand() % 4;
 		score += gameDynamic.removeRows();
-		height = gameDynamic.getHeight();
+		height = gameDynamic.getMaxHeight();
 		gameStatic = gameDynamic;
 	}
 	drawTable();
@@ -156,7 +156,7 @@ void Play::renderGameFrame() {
 }
 
 //	Set view variables to keep window ratio
-void Play::setView(const GLfloat &view_w, const GLfloat &view_h) {
+void Play::setView(const GLfloat& view_w, const GLfloat& view_h) {
 	Play::view_w = view_w;
 	Play::view_h = view_h;
 }

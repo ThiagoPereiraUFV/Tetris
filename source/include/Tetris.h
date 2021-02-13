@@ -25,12 +25,12 @@ class Tetris {
 		Tetris(const int);
 		Tetris(const Tetris&);
 
-		Tetris &operator=(const Tetris&);
+		Tetris& operator=(const Tetris&);
 
 		int removeRows();
 		char get(const int, const int) const;
 		int getWidth() const;
-		int getHeight() const;
+		int getMaxHeight() const;
 		int getHeight(const int c) const { return heights[c]; }
 		bool addPiece(const int, const int, const char, const int);
 };

@@ -12,7 +12,7 @@ void Tetris::build(const int width) {
 	this->width = width;
 }
 
-int Tetris::getHeight() const {
+int Tetris::getMaxHeight() const {
 	return *max_element(heights.begin(), heights.end());
 }
 
@@ -33,7 +33,7 @@ void Tetris::removeRow() {
 }
 
 int Tetris::removeRows() {
-	int maxHeight = getHeight(), removedRows = 0;
+	int maxHeight = getMaxHeight(), removedRows = 0;
 	for(int i = 0; i < maxHeight; i++) {
 		if(isRowComplete(i)) {
 			removeRow();
@@ -56,7 +56,7 @@ Tetris::Tetris(const Tetris& other) {
 	*this = other;
 }
 
-Tetris &Tetris::operator=(const Tetris& other) {
+Tetris& Tetris::operator=(const Tetris& other) {
 	if(this==&other) return *this;
 
 	build(other.width);
