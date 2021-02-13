@@ -10,12 +10,12 @@ using namespace std;
 
 class Tetris {
 	private:
-		char **game;
+		vector<string> game;
 		vector<int> heights;
 		int width;
 
 		bool isRowComplete(const int) const;
-		void removeRow(const int);
+		void removeRow();
 		void build(const int);
 		void rotateCW(vector<string>&);
 		bool ableToAddPiece(const int, const vector<string>&, const int) const;
@@ -24,12 +24,10 @@ class Tetris {
 		Tetris() { };
 		Tetris(const int);
 		Tetris(const Tetris&);
-		~Tetris();
 
 		Tetris &operator=(const Tetris&);
 
-		void removeRows();
-		void removeColumns(const int);
+		int removeRows();
 		char get(const int, const int) const;
 		int getWidth() const;
 		int getHeight() const;

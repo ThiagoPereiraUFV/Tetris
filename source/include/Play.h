@@ -22,7 +22,7 @@ class Play {
 		static char pieceId, lastKey;	//	Aux
 		static const vector<GLint> rotations;	//	Define available piece rotations
 		static Tetris gameStatic, gameDynamic;	//	Define two Tetris objects
-		static int speed, height, lastHeight, score;	//	Define game speed, height, last height and score
+		static int speed, height, score;	//	Define game speed, height and score
 		static int width, maxHeight, pieceHeight, piecePosition, pieceRotation;	//	Aux
 		static unordered_map<string, bool> option;	//	Options selected to set up a new game
 		static unordered_map<string, unordered_map<string, vector<GLfloat>>> colors;   //	Color scheme

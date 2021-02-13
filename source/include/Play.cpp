@@ -8,7 +8,7 @@ GLfloat Play::view_w, Play::view_h;
 char Play::pieceId, Play::lastKey;
 Tetris Play::gameStatic, Play::gameDynamic;
 int Play::piecePosition, Play::pieceRotation;
-int Play::speed, Play::height, Play::lastHeight, Play::score;
+int Play::speed, Play::height, Play::score;
 int Play::width, Play::maxHeight, Play::pieceHeight;
 unordered_map<string, bool> Play::option;
 const vector<GLint> Play::rotations{0, 90, 180, 270};
@@ -141,11 +141,8 @@ void Play::renderGameFrame() {
 		piecePosition = width / 2 - 2;
 		pieceHeight = maxHeight;
 		pieceRotation = rand() % 4;
-		lastHeight = gameDynamic.getHeight();
-		gameDynamic.removeRows();
+		score += gameDynamic.removeRows();
 		height = gameDynamic.getHeight();
-		if(height != lastHeight)
-			score++;
 		gameStatic = gameDynamic;
 	}
 	drawTable();

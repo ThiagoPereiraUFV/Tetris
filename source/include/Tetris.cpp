@@ -7,98 +7,50 @@ Tetris::Tetris(const int width) {
 }
 
 void Tetris::build(const int width) {
-	game = new char*[width];
+	game.resize(width, "");
 	heights.resize(width, 0);
-	for(int i = 0; i < width; i++) {
-		game[i] = NULL;
-	}
 	this->width = width;
 }
 
 int Tetris::getHeight() const {
-	return *max_element(begin(heights), end(heights));
+	return *max_element(heights.begin(), heights.end());
 }
-
-void Tetris::removeColumns(const int col) {
-	delete []game[col];
-	char **novoJogo = new char*[width-1];
-	vector<int> novaAlturas(width-1);
-	for(int i = 0; i < col; i++) {
-		novoJogo[i] = game[i];
-		novaAlturas[i] = heights[i];
-	}
-	for(int i = col+1; i < width; i++) {
-		novoJogo[i-1] = game[i];
-		novaAlturas[i-1] =heights[i];
-	}
-	delete []game;
-	game = novoJogo;
-	heights = novaAlturas;
-	width--;
-
-}
-
 
 bool Tetris::isRowComplete(const int r) const {
 	for(int i = 0; i < width; i++) {
-		if(r >= heights[i] || game[i][r] == ' ') return false;
+		if(r >= heights[i] || game[i][r] == ' ') {
+			return false;
+		}
 	}
 	return true;
 }
 
-#include <cassert>
-void Tetris::removeRow(const int r) {
+void Tetris::removeRow() {
 	for(int i = 0; i < width; i++) {
-		assert(r < heights[i]);
-		char *newColumn;
-		if(heights[i] == 1) {
-			newColumn = NULL;
-		} else newColumn = new char[heights[i]-1];
-
-		for(int j = 0; j < r; j++) newColumn[j] = game[i][j];
-		for(int j = r+1; j < heights[i]; j++) newColumn[j-1] = game[i][j];
-
-		delete []game[i];
-		game[i] = newColumn;
 		heights[i]--;
-
-		int maxHeightNewColumn = 0;
-		for(int j = 0; j < heights[i]; j++) {
-			if(newColumn[j] != ' ') maxHeightNewColumn = j+1;
-		}
-		if(maxHeightNewColumn != heights[i]) {
-			//devido a uma remocao precisamos deixar essa col mais justa!
-			char *newNewColumn = new char[maxHeightNewColumn];
-			heights[i] = maxHeightNewColumn;
-			for(int j = 0; j < maxHeightNewColumn; j++) newNewColumn[j] = newColumn[j];
-			delete []game[i];
-			game[i] = newNewColumn;
-		}
+		game[i] = game[i].substr(0, game[i].length()-1);
 	}
 }
 
-void Tetris::removeRows() {
-	int maxHeight = getHeight();
+int Tetris::removeRows() {
+	int maxHeight = getHeight(), removedRows = 0;
 	for(int i = 0; i < maxHeight; i++) {
 		if(isRowComplete(i)) {
-			removeRow(i);
+			removeRow();
 			maxHeight--; //uma row foi removida!
 			i--; //para testar a mesma row denovo (ja que tabuleiro foi deslocado para baixo...)
+			removedRows++;
 		}
 	}
+	return removedRows;
 }
 
 int Tetris::getWidth() const {
 	return width;
 }
 
-Tetris::~Tetris() {
-	for(int i = 0; i < width; i++) delete []game[i];
-	delete []game;
-}
-
 Tetris::Tetris(const Tetris& other) {
-	game = NULL;
+	game = {};
 	width = 0;
 	heights = {};
 	*this = other;
@@ -107,17 +59,11 @@ Tetris::Tetris(const Tetris& other) {
 Tetris &Tetris::operator=(const Tetris& other) {
 	if(this==&other) return *this;
 
-	for(int i = 0; i < width; i++) delete []game[i];
-	delete []game;
-
 	build(other.width);
 
-	for(int i = 0;i < width; i++) {
-		int height = other.heights[i];
-		heights[i] = height;
-		game[i] = new char[height];
-		for(int j = 0; j < height; j++) game[i][j] = other.game[i][j];
-	}
+	heights = other.heights;
+	game = other.game;
+
 	return *this;
 }
 
@@ -200,7 +146,6 @@ bool Tetris::addPiece(const int pos, const int height, const vector<string>& pie
 			novaColunaJogo[lJogo] = piece[l][c];
 		}
 
-		delete []game[cJogo];
 		game[cJogo] = novaColunaJogo;
 	}
 	return true;
