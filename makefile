@@ -1,21 +1,22 @@
-oglFlags = -O3 -lglut -lGL -lGLU
-ncursesFlags = -O3 -lncurses
-extraFlags = -c -O3
+optFlags = -Ofast -std=c++11 -Wall -Werror
+extraFlags = -c $(optFlags)
+oglFlags = $(optFlags) -lglut -lGL -lGLU
+ncursesFlags = $(extraFlags) -lncurses
 includePath = ./source/include
 
-Tetris: Menu.o Tetris.o Play.o Game.o
+Tetris: Game.o
 	g++ ./source/main.cpp ./bin/*.o $(oglFlags) -o tetris.out
 
 Menu.o:
 	g++ $(includePath)/Menu.cpp $(extraFlags) -o ./bin/Menu.o
 
 Tetris.o:
-	g++ $(includePath)/Tetris.cpp $(extraFlags) -o ./bin/Tetris.o
+	g++ $(includePath)/Tetris.cpp $(ncursesFlags) -o ./bin/Tetris.o
 
-Play.o:
+Play.o: Tetris.o
 	g++ $(includePath)/Play.cpp $(extraFlags) -o ./bin/Play.o
 
-Game.o:
+Game.o: Menu.o Play.o
 	g++ $(includePath)/Game.cpp $(extraFlags) -o ./bin/Game.o
 
 start:

@@ -365,6 +365,7 @@ void Game::HandleKeyboard(const unsigned char key, const int x, const int y) {
 		switch(key) {
 			case 27:
 				state = 0;
+				break;
 			case 32:
 				Play::setLastKey('s');
 				break;
